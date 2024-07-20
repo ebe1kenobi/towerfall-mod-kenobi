@@ -1,29 +1,157 @@
-##### Table of Contents  
-[Presentation](#presentation)  
-[AI mod](#aimod)  
-[TF-8 mod](#tf8mod)  
-[Acknowledgements](#acknowledgements)  
-
-
+# Table of Contents  
+- [Presentation](#presentation)
+- Mods List
+  - [TF-8 mod](#tf8mod)
+  - [AI python mod](#aimod)  - 
+  - [PlayTag mod](#playtagmod)
+  - [AI Native mod](#ainativemod)
+  - [Variant speed mod](#variantspeedmod)
+  - [Variant control ghost mod](#variantcontroghostmod)
+- [Acknowledgements](#acknowledgements)  
 
 <a name="presentation">
 
 # Presentation
-  
-This is a fork and the fusion of 2 mods :
-- [vcanaa](https://github.com/vcanaa) : https://github.com/TowerfallAi/towerfall-ai
+
+**Works only with WIndows 10 - Steam Version of towerfall** (only full compatibility with DLC darkfall for now, do not know how it will works without the DLC)
+This is a Compil of multiple Mods
+
 - [Jonesey13](https://github.com/Jonesey13) : [https://github.com/Jonesey13/TF-8-Player](https://github.com/Jonesey13/TF-8-Player)
+- AI python mod : https://github.com/ebe1kenobi/tf-mod-ai-python (fork + menu integration of [vcanaa](https://github.com/vcanaa) : https://github.com/TowerfallAi/towerfall-ai)
+- PlayTag mod : https://github.com/ebe1kenobi/tf-mod-playtag
+- AI Native mod : https://github.com/ebe1kenobi/tf-mod-ai
+- Variant speed mod : https://github.com/ebe1kenobi/tf-mod-variant-speed
+- Variant control ghost mod : https://github.com/ebe1kenobi/tf-mod-variant-control-ghost
   
-**Best thanks to them who did all the work.**
+**Best thanks to Jonesey13 and vcanaa.**
 
-You can play with or without a simple AI with or without your friends up to 8 player
+You can play 
+- with or without 2 simple AI (with python or not)
+- with or without your friends up to 8 player
+- play a new game mode play tag
+- with a new play tag treasure chest item
+- and 2 variant mod that are not worth presenting, they were juste test
 
-- I add the integration with the game: no purple screens, enable AI in Archer selection screen.
-- I add all the game mode to play with (Quest, DarkWorld, Trials, LastManStanding, HeadHunters, TeamDeathmatch) and other option, see below.
+## build the mod (for the devs)
+
+- Clone this repository
+```Shell
+git clone https://github.com/ebe1kenobi/towerfall-mod-kenobi.git
+  ```
+- If you want to use the mod  [AI python mod](#aimod), you will need to
+  - Install python 3 and add it to your SYSTEM PATH variable
+  - Install pip to download the dependency
+  - then go in your directory .\script and execute the command
+  - ```Shell
+  pip install -r python/requirements.txt
+  ```
+- You need to install visual studio 2022 community (free)
+- Before opening the project, you need to dowload .NET 4 which is nortsuported anymore, on nuget :
+  - https://www.nuget.org/packages/microsoft.netframework.referenceassemblies.net40
+  - and copy the directory build\.NETFramework\v4.0 in C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework 
+- You can now open the project with the file .\VSProject\ModCompilKenobi.sln
+
+First you need to build the projects PatcherLib and Patcher because to build the project ModCompilKenobi we need a version of TowerFall.exe unsealed (with all the property and method public instead of private).
+
+![image](https://github.com/user-attachments/assets/40c88fff-79e7-4fee-b1b2-ec004843884b)
+
+
+![image](https://github.com/user-attachments/assets/a42fcbab-30cb-40f2-a6e3-a8c9d106d46c)
+
+
+The assembly are in .\VSProject\ModCompilKenobi\bin\PatchWindows 
+
+Then copy the original file TowerFall.exe from
+```
+C:\Program Files (x86)\Steam\steamapps\common\TowerFall\TowerFall.exe 
+```
+in
+```
+.\VSProject\ModCompilKenobi\bin\PatchWindows 
+```
+Then execute the script .\script\makebaseimage.bat (**change the path of your directory in .\script\config.bat**)
+
+You should see the next result:
+
+```
+D:\__dev\code\towerfall\VSProject\ModCompilKenobi\bin\PatchWindows>Patcher.exe makebaseimage -t TowerFall.exe
+Creating unsealed image from D:\__dev\code\towerfall\VSProject\ModCompilKenobi\bin\PatchWindows\Patcher\Original\TowerFall.exe
+Unsealed binary created in D:\__dev\code\towerfall\VSProject\ModCompilKenobi\bin\PatchWindows\Patcher\Unsealed\TowerFall.exe
+
+```
+
+Then you can build the project ModCompilKenobi
+
+![image](https://github.com/user-attachments/assets/fca1e90f-5563-4e30-a6b4-95887c5ffaba)
+
+
+This wiil build the ModCompilKenobi.dll in 
+```
+.\VSProject\ModCompilKenobi\bin\PatchWindows
+```
+
+You can use the scripts in .\script to release then deploy in the towerfall steam directory
+
+In some case (crash of visual studio, or ...) you will need to force update the nugate package in the package manager console in "Tools > nugate package manager > package manager console", then execute the command :
+
+```
+update-package Microsoft.Bcl.Async -reinstall
+```
+See the package config file in .\VSProject\ModCompilKenobi\packages.config to see the list of package.
+
+## Installing
+
+Only tested on Windows at the moment.
+
+* Purchase the game [TowerFall Ascension](https://store.steampowered.com/app/251470/TowerFall_Ascension/) on steam. (**BUY IT**, best game ever)
+
+* Locate `TowerFall.exe` in the game directory. To find it, go to Steam, right-click the game and navigate to `Properties > Local Files > Browse...`
+
+* Download the mod from the latest [release](../../releases), unzip all its contents in the game directory. Make sure they are in the same directory as `TowerFall.exe`.
+
+* If you do not have the DarkWorld Expansion, delete the DarkWorldContent folder.
+* If you are using the Humble version, replace Content/Atlas/menuAtlas.xml with Content/Atlas/menuAtlas-Humble-Version.xml.
+
+* Make sure the game is not running, then execute `Patcher.exe`. This will overwrite create the file `TowerFall.exe.ModCompilKenobi.exe`.
+* Rename TowerFall.exe to TowerFall.exe.original
+* Rename TowerFall.exe.ModCompilKenobi.exe to TowerFall.exe
+
+**To activate some meodule you need to add option parameter to the towerfall.exe** :
+  - [TF-8 mod](#tf8mod) : --8pmod
+  - [AI python mod](#aimod)  : --aimod
+  - [PlayTag mod](#tf8mod) : none
+  - [AI Native mod](#tf8mod) : --nativeaimod (with --nativeaimodnokeyboard if you want to discard the keyboard for an AI)
+  - [Variant speed mod](#tf8mod) : none
+  - [Variant control ghost mod](#tf8mod) : none
+
+### Uninstalling
+To uninstall this mod, right-click on the game and go to `Properties > Local Files > Verify integrity of game files...` This will download the unmodified file from Steam.
+
+**Note:** The mod is uninstalled whenever the game is updated. To reinstall it, delete the `Patcher` directory and re-run the patch command.
+
+## Known Limitation
+
+- I Tested on Darkworld DLC only, I do not know how it will work without Darkworld DLC
+- Can't play with 4 players team (for 8 player mod)
+- When no option is set, the original game wil be executed.
+- ON Quest and DarkWorld Mode, if you select AI agent above P4, the game will crash or some players wil be missing
+- The AI agent (simple_agent.py) has not be modified, so in DarkWorld (or Quest?) mode, the agent will not jump in the portal when they won a game.
+- On trials mode, the AI doesn't detect the enemy and do nothing
+- playtag is not supported by AI mod
+
+<a name="aimod">
+  
+# AI python mod
+  
+![A mod that enables AI to play the game TowerFall Ascension](./banner.png)
+
+See : https://github.com/ebe1kenobi/tf-mod-ai-python
+
+A mod that enables AI to play the game [TowerFall Ascension](http://www.towerfall-game.com). Get started with code examples in python to create your AI to play with (or against).
 
 - the original option --aimod became **--aimodtraining**
 - the **--aimod option** is now used to play with your friends or/and AI
-- to play with 8 player, you need to add **--8pmod**
+
 
 **Game mode compatibility player :**
 
@@ -35,6 +163,7 @@ You can play with or without a simple AI with or without your friends up to 8 pl
 |HeadHunters|X|X|X|X|X|X|X|X|
 |Last Man Standing|X|X|X|X|X|X|X|X|
 |Team Death Match|X|X|X|X|X|X|||
+|Pay Tag|||||||||
 
 **Game mode compatibility mod :**
 
@@ -46,109 +175,7 @@ You can play with or without a simple AI with or without your friends up to 8 pl
 |HeadHunters|X|X|X|
 |Last Man Standing|X|X|X|
 |Team Death Match|X|X|X|
-
-## build the mod (for the devs)
-
-Clone this repository
-
-git clone https://github.com/ebe1kenobi/towerfall-ai.git
-
-You need to install visual studio 2022
-
-Before opening the project, you need to dowload .NET 4 which is nor suported anymore on nuget :
-
-https://www.nuget.org/packages/microsoft.netframework.referenceassemblies.net40
-
-and copy the directory build\.NETFramework\v4.0
-
-in C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework 
-
-You can now open the project with the file TowerFallAi.sln
-
-First you need to build the projects PatcherLib and Patcher because to build the project TowerFalAiMod we need a version of TowerFall.exe unsealed (with all the property and method public instead of private).
-
-![image](https://github.com/ebe1kenobi/towerfall-ai/assets/141447305/294cdb3c-43a3-46e0-bd8d-c8df41c8dc4e)
-
-![image](https://github.com/ebe1kenobi/towerfall-ai/assets/141447305/12b13546-db06-4c66-8558-4ea01d720220)
-
-The assembly are in towerfall-ai\TowerFallAi\bin\PatchWindows 
-
-Then copy the original file TowerFall.exe from
-```
-C:\Program Files (x86)\Steam\steamapps\common\TowerFall\TowerFall.exe 
-```
-in
-```
-towerfall-ai\TowerFallAi\bin\PatchWindows 
-```
-Then in a command shell, go in the directory towerfall-ai\TowerFallAi\bin\PatchWindows and execute 
-
-```
-Patcher.exe makebaseimage -t TowerFall.exe
-```
-You should see the next result:
-
-```
-D:\__dev\code\towerfall-ai-myfork\TowerFallAi\bin\PatchWindows>Patcher.exe makebaseimage -t TowerFall.exe
-Creating unsealed image from D:\__dev\code\towerfall-ai-myfork\TowerFallAi\bin\PatchWindows\Patcher\Original\TowerFall.exe
-Unsealed binary created in D:\__dev\code\towerfall-ai-myfork\TowerFallAi\bin\PatchWindows\Patcher\Unsealed\TowerFall.exe
-
-D:\__dev\code\towerfall-ai-myfork\TowerFallAi\bin\PatchWindows>
-```
-
-Then you can build the project TowerfallAiMod
-
-![image](https://github.com/ebe1kenobi/towerfall-ai/assets/141447305/36569ff4-3d61-4e19-a936-55f2eb364f47)
-
-This wiil build the TowerfallAiMod.dll in 
-```
-towerfall-ai\TowerFallAi\bin\PatchWindows
-```
-
-You can use 
-- release.bat tu build a directory with all the file needed to patch the game
-- and deploy.bat to copy the file in release directory to the steam game path , patch the file and rename the exe file
-- You need to edit thos 2 file to modify the path to some directory at the beginning of the file
-
-## Installing
-
-Only tested on Windows at the moment.
-
-* Purchase the game [TowerFall Ascension](https://store.steampowered.com/app/251470/TowerFall_Ascension/) on steam.
-
-* Locate `TowerFall.exe` in the game directory. To find it, go to Steam, right-click the game and navigate to `Properties > Local Files > Browse...`
-
-* Download the mod from the latest [release](../../releases), unzip all its contents in the game directory. Make sure they are in the same directory as `TowerFall.exe`.
-
-* If you do not have the DarkWorld Expansion, delete the DarkWorldContent folder.
-* If you are using the Humble version, replace Content/Atlas/menuAtlas.xml with Content/Atlas/menuAtlas-Humble-Version.xml.
-
-* Make sure the game is not running, then execute `Patcher.exe`. This will overwrite create the file `TowerFall.exe.AI8P.exe`.
-* Rename TowerFall.exe to TowerFall.exe.original
-* Rename TowerFall.exe.AI8P.exe to TowerFall.exe
-
-### Uninstalling
-To uninstall this mod, right-click on the game and go to `Properties > Local Files > Verify integrity of game files...` This will download the unmodified file from Steam.
-
-**Note:** The mod is uninstalled whenever the game is updated. To reinstall it, delete the `Patcher` directory and re-run the patch command.
-
-## Known Limitation
-
-- I Tested on Darkworld DLC only, I do not know how it will work without Darkworld DLC
-- Can't play with 4 players team
-- When no option is set, the original game wil be executed, but a bug don't show the archer prortrait on the select archer screen, but the game works fine.
-- ON Quest and DarkWorld Mode, if you select AI agent above P4, the game will crash or some players wil be missing
-- The AI agent (simple_agent.py) has not be modified, so in DarkWorld (or Quest?) mode, the agent will not jump in the portal when they won a game.
-- On trials mode, the AI doesn't detect the enemy and do nothing 
-
-<a name="aimod">
-
-# AI MOD
-  
-![A mod that enables AI to play the game TowerFall Ascension](./banner.png)
-
-
-A mod that enables AI to play the game [TowerFall Ascension](http://www.towerfall-game.com). Get started with code examples in python to create your AI to play with (or against).
+|Play Tag|X|X|X|
 
 ## Play Game Versus AI when you're alone or with your friends
 
@@ -175,6 +202,8 @@ On the Archer select screen, the AI agent use a keyboard config each, Select the
  
 **Keyboard config for each AI :**
 
+<a name="aikeyboardconfiguration">
+  
 |Action | P1 | P2 | P3 | P4 | P5 | P6 | P7 | P8 |
 | ----- | -- | -- | -- | -- | -- | -- | -- | -- |
 |Down   | A  | Q  | W  | Y  | H  | F9  | Down  | RightShift  |
@@ -966,9 +995,75 @@ A Towerfall mod that uses a modified version of the [Bartizan](https://github.co
 ![](https://github.com/Jonesey13/TF-8-Player/blob/master/Demo.gif)
 
 ## Features
+
 * 8 player versus mode
 * 3v3 in team deathmatch
 
+<a name="playtagmod">
+  
+# PlayTag mod
+
+See https://github.com/ebe1kenobi/tf-mod-playtag
+
+![image](https://github.com/user-attachments/assets/34584c87-a5d5-4e40-97d4-14b6521a6f75)
+
+![image](https://github.com/user-attachments/assets/5b1fc470-d110-4b3c-86df-8ebf5ea716b0)
+
+
+A new Game Mod to Play tag. Each round a player has It, and it must touch another player to pass It. All the player alive at the end of the round gain 1 point.
+- No Arrow
+- No kill on stomping
+- Treasure chest will not give Arrows
+- the player can be killed by the environment
+- The shield can protect from It
+
+In other versus mode, a treasure chest can give a hidden Play Tag item in the form of other items (arrow, orb, ...), you can't know if it is it or not :) It will spawn only once per match.
+When a Player will take the false items, the playtag mode will activate for 10 seconds, then the normal mode will be back.
+
+
+<a name="ainativemod">
+  
+# AI Native mod 
+
+See https://github.com/ebe1kenobi/tf-mod-ai
+
+![image](https://github.com/user-attachments/assets/98ecdf2d-dc39-49ce-8434-b1ace438515b)
+
+When activated by the option **--nativeaimod** (and optionnaly **--nativeaimodnokeyboard** if you want to play against up to 7 AI), the archer select screen will give you the choice to select one or multiple AI with the key 1 to 8. The AI are control like a keyboard, so each AI has a keyboard configuration (See [AI Keyboard Configuration](#aikeyboardconfiguration)
+
+It's a bit dumb (the AI in the AI python mod is better, dumb too but better :) )
+
+The Quest and Darkworld are not implemented yet.
+
+<a name="variantspeedmod">
+  
+# Variant speed mod
+
+See https://github.com/ebe1kenobi/tf-mod-variant-speed
+
+![image](https://github.com/user-attachments/assets/44d482f8-6eab-4cb2-90c0-6dfe318166b9)
+
+
+You can speed up the game from X 1.1 to X10 ...
+
+You need to add the variant in the match settings page
+
+<a name="variantcontroghostmod">
+  
+# Variant control ghost mod
+
+See https://github.com/ebe1kenobi/tf-mod-variant-control-ghost
+
+![image](https://github.com/user-attachments/assets/42c355a2-f80d-4648-bd60-3cfab70721f2)
+
+
+On XBOX gamepad, the two upper trigger at the back of the gamepad is now used to activate a ghost deplacement, you will see...
+
+You need to add the variant in the match settings page
+
+There are two variant in ARCHERS (at the bottom of the page Variant, a second category ARCHERS exists) : normal and random
+
+  - 
 ## Known Issues / Limitations
 * You cannot have 4 players on a team. Don't even try! The game will crash. You'll have to patch your own levels to make this work!
 * Some of the patched starting positions are a little broken but I've tried my hardest to space people out. It's the best I could do!
