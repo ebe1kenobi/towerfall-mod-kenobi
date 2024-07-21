@@ -17,10 +17,12 @@ namespace TowerfallAi.Core {
   /// Entry point for the modifications in the game.
   /// </summary>
   public static class AiMod {
-    
+    // Original Mods
+    public const string TFModAiPythonSource = "https://github.com/ebe1kenobi/tf-mod-ai-python";
+    public const string TFModAiPythonVersion = "v0.1";
     // Fork Mods
     public const string ModAiSource = "https://github.com/TowerfallAi/towerfall-ai";
-    public const string ModAiVersion = "v0.1.1"; //"v1.0.0" ModCompilKenobiVersion
+    public const string ModAiVersion = "v0.1.1"; 
 
     private const string poolName = "default";
     public const string BaseDirectory = "aimod2";
