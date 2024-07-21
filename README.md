@@ -11,6 +11,8 @@
 
 <a name="presentation">
 
+
+
 # Presentation
 
 **Works only with WIndows 10 - Steam Version of towerfall** (only full compatibility with DLC darkfall for now, do not know how it will works without the DLC)
@@ -143,6 +145,8 @@ To uninstall this mod, right-click on the game and go to `Properties > Local Fil
   
 # AI python mod
 
+![compil2](https://github.com/user-attachments/assets/67b404e1-dc14-44f8-b1d5-20b0447babc6)
+(1 human and 7 AI)
  
 ![A mod that enables AI to play the game TowerFall Ascension](./banner.png)
 
@@ -1007,6 +1011,8 @@ A Towerfall mod that uses a modified version of the [Bartizan](https://github.co
 # PlayTag mod 
 
 See https://github.com/ebe1kenobi/tf-mod-playtag
+
+![playtag4](https://github.com/user-attachments/assets/acaff9b3-d1e6-4332-a954-ea3a7a74d2d6)
 
 ![image](https://github.com/user-attachments/assets/34584c87-a5d5-4e40-97d4-14b6521a6f75)
 
