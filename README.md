@@ -141,7 +141,7 @@ To uninstall this mod, right-click on the game and go to `Properties > Local Fil
 
 <a name="aimod">
   
-# AI python mod v0.1.0
+# AI python mod
 
  
 ![A mod that enables AI to play the game TowerFall Ascension](./banner.png)
