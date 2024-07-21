@@ -28,9 +28,4 @@ copy "%REPO_BUILD_PATH%Mono.Cecil.dll" %REPO_RELEASE_PATH%
 
 xcopy /E /I %REPO_PYTHON_SCRIPT_PATH%  %REPO_RELEASE_PATH%\python
 
-copy %REPO_PATH%script\TowerFall.bat %REPO_RELEASE_PATH%
-
 xcopy /E /I %REPO_PATH%modFile\* %REPO_RELEASE_PATH%
-
-
-@REM pause

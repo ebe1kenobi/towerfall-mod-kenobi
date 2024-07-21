@@ -25,7 +25,7 @@ namespace TowerfallAi.Core {
     public const string ModAiVersion = "v0.1.1"; 
 
     private const string poolName = "default";
-    public const string BaseDirectory = "aimod2";
+    public const string BaseDirectory = "aimod";
     private const string defaultConfigName = "config.json";
 
     // If this is set to false, this mod should do no effect.
