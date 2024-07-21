@@ -1,12 +1,12 @@
 # Table of Contents  
 - [Presentation](#presentation)
 - Mods List
-  - [TF-8 mod](#tf8mod)
-  - [AI python mod](#aimod)  - 
-  - [PlayTag mod](#playtagmod)
-  - [AI Native mod](#ainativemod)
-  - [Variant speed mod](#variantspeedmod)
-  - [Variant control ghost mod](#variantcontroghostmod)
+  - [TF-8 mod](#tf8mod)  v1.3 
+  - [AI python mod](#aimod)   v0.1 
+  - [PlayTag mod](#playtagmod) v0.1 
+  - [AI Native mod](#ainativemod) v0.1
+  - [Variant speed mod](#variantspeedmod) v0.1
+  - [Variant control ghost mod](#variantcontroghostmod) V0.1
 - [Acknowledgements](#acknowledgements)  
 
 <a name="presentation">
@@ -141,8 +141,9 @@ To uninstall this mod, right-click on the game and go to `Properties > Local Fil
 
 <a name="aimod">
   
-# AI python mod
-  
+# AI python mod v0.1.0
+
+ 
 ![A mod that enables AI to play the game TowerFall Ascension](./banner.png)
 
 See : https://github.com/ebe1kenobi/tf-mod-ai-python
@@ -988,6 +989,8 @@ There are a few improvements that are tricky, but in theory possible. They might
   
 # 8 Player TowerFall Mod 
 
+
+
 A Towerfall mod that uses a modified version of the [Bartizan](https://github.com/Kha/Bartizan) modding framework and [Mono.Cecil](https://github.com/jbevain/cecil). Original copyright belongs to Matt Thorson.
 
 **You need to add the option --8pmod to activate this mod**
@@ -1001,7 +1004,7 @@ A Towerfall mod that uses a modified version of the [Bartizan](https://github.co
 
 <a name="playtagmod">
   
-# PlayTag mod
+# PlayTag mod 
 
 See https://github.com/ebe1kenobi/tf-mod-playtag
 
@@ -1023,9 +1026,9 @@ When a Player will take the false items, the playtag mode will activate for 10 s
 
 <a name="ainativemod">
   
-# AI Native mod 
+# AI Native mod  
 
-See https://github.com/ebe1kenobi/tf-mod-ai
+ See https://github.com/ebe1kenobi/tf-mod-ai
 
 ![image](https://github.com/user-attachments/assets/98ecdf2d-dc39-49ce-8434-b1ace438515b)
 
@@ -1037,9 +1040,9 @@ The Quest and Darkworld are not implemented yet.
 
 <a name="variantspeedmod">
   
-# Variant speed mod
+# Variant speed mod 
 
-See https://github.com/ebe1kenobi/tf-mod-variant-speed
+ See https://github.com/ebe1kenobi/tf-mod-variant-speed
 
 ![image](https://github.com/user-attachments/assets/44d482f8-6eab-4cb2-90c0-6dfe318166b9)
 
@@ -1050,9 +1053,9 @@ You need to add the variant in the match settings page
 
 <a name="variantcontroghostmod">
   
-# Variant control ghost mod
+# Variant control ghost mod 
 
-See https://github.com/ebe1kenobi/tf-mod-variant-control-ghost
+ See https://github.com/ebe1kenobi/tf-mod-variant-control-ghost
 
 ![image](https://github.com/user-attachments/assets/42c355a2-f80d-4648-bd60-3cfab70721f2)
 
