@@ -85,7 +85,7 @@ Then you can build the project ModCompilKenobi
 ![image](https://github.com/user-attachments/assets/fca1e90f-5563-4e30-a6b4-95887c5ffaba)
 
 
-This wiil build the ModCompilKenobi.dll in 
+This will build the ModCompilKenobi.dll in 
 ```
 .\VSProject\ModCompilKenobi\bin\PatchWindows
 ```
