@@ -4,12 +4,34 @@ using Patcher;
 using TowerFall;
 using ModCompilKenobi;
 using TowerfallAi.Core;
+using System;
 
 namespace TowerfallAi.Mod {
   [Patch]
   public class ModPauseMenu : PauseMenu {
-    public ModPauseMenu(Level level, Vector2 position, MenuType menuType, int controllerDisconnected = -1) : base(level, position, menuType, controllerDisconnected) { }
+  	
+  	public readonly DateTime creationTime;
+  	
+    public ModPauseMenu(Level level, Vector2 position, MenuType menuType, int controllerDisconnected = -1) : base(level, position, menuType, controllerDisconnected) 
+    {
+   		creationTime = DateTime.Now; 
+    }
 
+	public override void Resume()
+    {
+      int pauseDuration = (int)(DateTime.Now - creationTime).TotalSeconds;
+
+      for (var i = 0; i < TFGame.Players.Length; i++)
+      {
+        Player p = level.Session.CurrentLevel.GetPlayer(i);
+        if (p != null)
+        {
+          p.pauseDuration += pauseDuration;
+        }
+      }
+      base.Resume();
+    }
+    
     public override void VersusMatchSettingsAndSave() {
       if (AiMod.ModAITraining) {
         AiMod.EndSession();

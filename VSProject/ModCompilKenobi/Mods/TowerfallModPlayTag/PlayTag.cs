@@ -358,9 +358,11 @@ namespace TowerfallAi.Mod
       {
         return;
       }
+      Player.ShootLock = true;
       player.playTagCountDown = player.playTagDelay;
       player.playTag = true;
       player.creationTime = DateTime.Now;
+      player.pauseDuration = 0;
 
       for (var i = 0; i < TFGame.Players.Length; i++)
       {

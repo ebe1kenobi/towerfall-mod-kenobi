@@ -2,6 +2,6 @@
 {
   public static class ModVariantControlGhost {
     
-    public const string ModVariantControlGhostVersion = "v0.1";
+    public const string ModVariantControlGhostVersion = "v0.2";
   }
 }
