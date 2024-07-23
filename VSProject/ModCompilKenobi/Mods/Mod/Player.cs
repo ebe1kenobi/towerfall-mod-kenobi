@@ -24,6 +24,7 @@ namespace TowerfallAi.Mod
     public int previousPlayTagCountDown = 0;
     public bool playTagCountDownOn = false;
     public readonly DateTime creationTime;
+    public int pauseDuration = 0;
     // End Play Tag var
 
     // Ghost mode var
@@ -129,13 +130,10 @@ namespace TowerfallAi.Mod
       Indicator.Render();
     }
 
-    public override void ShootArrow() 
-    {
-      if (playTagCountDownOn) 
-        return;
-      // When MatchSettings.Mode == Modes.PlayTag we can Hurt people juste after the bomb explose ^^, it's a feature!
-      base.ShootArrow();
-    }
+    //public override void ShootArrow() 
+    //{
+    //  base.ShootArrow();
+    //}
 
     public override void HurtBouncedOn(int bouncerIndex)
     {
@@ -158,7 +156,7 @@ namespace TowerfallAi.Mod
           delay = playTagDelay;
         }
         previousPlayTagCountDown = playTagCountDown;
-        playTagCountDown = delay - (int)(DateTime.Now - creationTime).TotalSeconds;
+        playTagCountDown = delay - (int)(DateTime.Now - creationTime).TotalSeconds + pauseDuration;
       }
       if (isGhostCooldown && (bool)this.kamikazeBufferCounter)
       {
@@ -166,7 +164,16 @@ namespace TowerfallAi.Mod
       }
     }
 
-  public int GhostUpdate()
+    public void addPauseDuration(int pauseDuration) {
+      this.pauseDuration += pauseDuration;
+    }
+
+    public void resetPauseDuration()
+    {
+      this.pauseDuration = 0;
+    }
+
+    public int GhostUpdate()
     {
       Vector2 newPosition;
 
@@ -408,7 +415,7 @@ namespace TowerfallAi.Mod
     public override int NormalUpdate()
     {
       int result = base.NormalUpdate();
-      if (result != 0 && result != 2)
+      if (result != 0)
       {
         return result;
       }

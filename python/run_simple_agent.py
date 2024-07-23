@@ -8,7 +8,7 @@ def main():
       matchLengths='Quick',
       mode='HeadHunters', #Quest, DarkWorld, Trials, LastManStanding, HeadHunters, TeamDeathmatch, PlayTag( not supported = Warlord)
       level=2,
-      fps=60,
+      # fps=60,
       agentTimeout='24:00:00',      
       agents=[
         dict(type='remote', archer='white', ai='SimpleAgentLevel1'),

@@ -17,6 +17,7 @@ namespace Patcher
       type.Fields.Add(new FieldDefinition("playTagDelay", Mono.Cecil.FieldAttributes.Public, baseModule.ImportReference(typeof(int))));
       type.Fields.Add(new FieldDefinition("playTagDelayModePlayTag", Mono.Cecil.FieldAttributes.Public, baseModule.ImportReference(typeof(int))));
       type.Fields.Add(new FieldDefinition("creationTime", Mono.Cecil.FieldAttributes.Public, baseModule.ImportReference(typeof(DateTime))));
+      type.Fields.Add(new FieldDefinition("pauseDuration", Mono.Cecil.FieldAttributes.Public, baseModule.ImportReference(typeof(int))));
     }
   }
 }

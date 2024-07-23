@@ -59,6 +59,8 @@
   <ItemGroup>
     <Compile Include="ModCompilKenobi\Core\ModCompilKenobi.cs" />
     <Compile Include="Mods\ModVariantControlGhostVersion\ModVariantControlGhostVersion.cs" />
+    <Compile Include="Mods\Mod\Loader.cs" />
+    <Compile Include="Mods\Mod\MainMenu.cs" />
     <Compile Include="Mods\TF8PlayerMod\TF8PlayerMod.cs" />
     <Compile Include="Mods\TowerfallAiMod\Api\State.cs" />
     <Compile Include="Mods\TowerfallAiMod\Api\StateSubType.cs" />

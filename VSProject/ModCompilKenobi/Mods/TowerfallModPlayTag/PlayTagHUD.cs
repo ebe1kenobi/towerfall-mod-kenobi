@@ -47,6 +47,7 @@ namespace TowerfallAi.Mod
         {
           p.playTagCountDownOn = false;
         }
+        Player.ShootLock = false;
         Explosion.SpawnSuper(player.Level, player.Position, player.PlayerIndex, true);
       }
 

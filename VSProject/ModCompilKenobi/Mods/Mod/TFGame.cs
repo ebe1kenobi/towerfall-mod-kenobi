@@ -83,6 +83,7 @@ namespace TowerfallAi.Mod {
 
       if (AiMod.ModAIEnabled)
       {
+        AiMod.gameTime = gameTime;
         AiMod.Update(originalUpdate);
         return;
       }

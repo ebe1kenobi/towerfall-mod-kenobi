@@ -2,6 +2,6 @@
 {
   public static class TowerfallModPlayTag
   {
-    public const string ModPlayTag             = "v0.1"; 
+    public const string ModPlayTag             = "v0.2"; 
   }
 }
