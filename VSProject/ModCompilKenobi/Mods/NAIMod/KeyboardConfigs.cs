@@ -80,22 +80,22 @@ namespace NAIMod {
       Configs[j].Dodge = new Keys[] { Keys.N };
 
       j++;
-      Configs[j].Down = new Keys[] { Keys.Down };
-      Configs[j].Up = new Keys[] { Keys.Up };
-      Configs[j].Left = new Keys[] { Keys.Left };
-      Configs[j].Right = new Keys[] { Keys.Right };
+      Configs[j].Down = new Keys[] { Keys.PageUp };
+      Configs[j].Up = new Keys[] { Keys.PageDown };
+      Configs[j].Left = new Keys[] { Keys.D0 };
+      Configs[j].Right = new Keys[] { Keys.D1 };
       Configs[j].Jump = new Keys[] { Keys.NumPad7 };
       Configs[j].Shoot = new Keys[] { Keys.F7 };
-      Configs[j].Dodge = new Keys[] { Keys.LeftControl };
+      Configs[j].Dodge = new Keys[] { Keys.D2 };
 
       j++;
-      Configs[j].Down = new Keys[] { Keys.RightShift };
-      Configs[j].Up = new Keys[] { Keys.RightAlt };
-      Configs[j].Left = new Keys[] { Keys.RightControl };
-      Configs[j].Right = new Keys[] { Keys.Enter };
+      Configs[j].Down = new Keys[] { Keys.D3 };
+      Configs[j].Up = new Keys[] { Keys.D4 };
+      Configs[j].Left = new Keys[] { Keys.D5 };
+      Configs[j].Right = new Keys[] { Keys.D6 };
       Configs[j].Jump = new Keys[] { Keys.NumPad8 };
       Configs[j].Shoot = new Keys[] { Keys.F8 };
-      Configs[j].Dodge = new Keys[] { Keys.LeftWindows };
+      Configs[j].Dodge = new Keys[] { Keys.D7 };
     }
   }
 }

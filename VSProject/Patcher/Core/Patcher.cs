@@ -114,7 +114,6 @@ namespace Patcher {
       MyModes.PatchModule(module);
       MyVersusModeButton.PatchModule(module);
 
-
       module.Write(unsealedPath);
       Console.WriteLine("Unsealed binary created in {0}", unsealedPath);
       return unsealedPath;

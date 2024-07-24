@@ -61,6 +61,8 @@
     <Compile Include="Mods\ModVariantControlGhostVersion\ModVariantControlGhostVersion.cs" />
     <Compile Include="Mods\Mod\Loader.cs" />
     <Compile Include="Mods\Mod\MainMenu.cs" />
+    <Compile Include="Mods\Mod\PlayerIndicator.cs" />
+    <Compile Include="Mods\Mod\VersusRoundResults.cs" />
     <Compile Include="Mods\TF8PlayerMod\TF8PlayerMod.cs" />
     <Compile Include="Mods\TowerfallAiMod\Api\State.cs" />
     <Compile Include="Mods\TowerfallAiMod\Api\StateSubType.cs" />
