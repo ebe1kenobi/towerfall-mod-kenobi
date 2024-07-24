@@ -31,7 +31,7 @@ namespace NAIMod
         {
           NAIModEnabled = false;
         }
-        if (args[i] == "--nativeaimodkeyboard")
+        if (args[i] == "--nonativeaimodkeyboard")
         {
           NAIModNoKeyboardEnabled = false;
         }
