@@ -38,8 +38,8 @@ namespace ModCompilKenobi
 
       for (var i = 0; i < TFGame.Players.Length; i++)
       {
-        AiMod.nbPlayerType[i] = 0;
-        AiMod.currentPlayerType[i] = PlayerType.None;
+        ModCompilKenobi.nbPlayerType[i] = 0;
+        ModCompilKenobi.currentPlayerType[i] = PlayerType.None;
       }
       if (AiMod.ModAIEnabled) {
         this.InactiveSleepTime = new TimeSpan(0);

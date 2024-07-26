@@ -29,12 +29,6 @@ namespace TowerfallAi.Core {
     public static bool AgentConnected = false;
     public static AgentConnection[] agents = new AgentConnection[TFGame.Players.Length];
 
-    public static PlayerInput[] savedHumanPlayerInput = new PlayerInput[TFGame.Players.Length];
-    public static int[] nbPlayerType = new int[TFGame.Players.Length];
-    public static PlayerType[] currentPlayerType = new PlayerType[TFGame.Players.Length];
-    public static bool isHumanPlayerTypeSaved = false;
-
-    // If this is set to false, this mod should do no effect.
     public static bool ModAIEnabled { get; private set;}
     public static bool ModAITraining { get; private set;}
 

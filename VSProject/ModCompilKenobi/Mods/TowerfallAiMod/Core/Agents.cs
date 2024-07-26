@@ -118,11 +118,11 @@ namespace TowerfallAi.Core {
         }
 
         AgentConnections.Add(agentConnection);
-        AiMod.nbPlayerType[indexAgent]++;
+        ModCompilKenobi.ModCompilKenobi.nbPlayerType[indexAgent]++;
         AiMod.agents[indexAgent] = agentConnection;
-        if (AiMod.currentPlayerType[indexAgent] == PlayerType.NAIMod)
-        {  
-          AiMod.currentPlayerType[indexAgent] = PlayerType.AiMod;
+        if (ModCompilKenobi.ModCompilKenobi.currentPlayerType[indexAgent] == PlayerType.NAIMod)
+        {
+          ModCompilKenobi.ModCompilKenobi.currentPlayerType[indexAgent] = PlayerType.AiMod;
         }
         indexAgent++;
       }

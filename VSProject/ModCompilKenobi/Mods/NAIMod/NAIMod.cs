@@ -64,12 +64,12 @@ namespace NAIMod
         // create an agent for each player
         AgentInputs[i] = new Input(i);
         agents[i] = new Agent(i, AgentInputs[i]);
-        AiMod.nbPlayerType[i]++;
+        ModCompilKenobi.ModCompilKenobi.nbPlayerType[i]++;
         Logger.Info("Agent " + i + " Created");
         if (null != TFGame.PlayerInputs[i]) continue;
 
         TFGame.PlayerInputs[i] = AgentInputs[i];
-        AiMod.currentPlayerType[i] = PlayerType.NAIMod;
+        ModCompilKenobi.ModCompilKenobi.currentPlayerType[i] = PlayerType.NAIMod;
       }
 
       isAgentReady = true;

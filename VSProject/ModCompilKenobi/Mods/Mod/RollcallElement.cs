@@ -22,9 +22,9 @@ namespace ModCompilKenobi
       {
         // set the player with gamepad connected to human control even if AI player is the current player => the human can utilise the 
         // gamepad/keyboard to change the archer options
-        if (AiMod.savedHumanPlayerInput[this.playerIndex] != null)
+        if (ModCompilKenobi.savedHumanPlayerInput[this.playerIndex] != null)
         {
-          TFGame.PlayerInputs[this.playerIndex] = AiMod.savedHumanPlayerInput[this.playerIndex];
+          TFGame.PlayerInputs[this.playerIndex] = ModCompilKenobi.savedHumanPlayerInput[this.playerIndex];
           input = TFGame.PlayerInputs[this.playerIndex];
         }
       }
@@ -78,10 +78,10 @@ namespace ModCompilKenobi
     }
 
     private void SetAllPLayerInput() {
-      for (var i = 0; i < AiMod.currentPlayerType.Length; i++) {
-        switch (AiMod.currentPlayerType[i]) {
+      for (var i = 0; i < ModCompilKenobi.currentPlayerType.Length; i++) {
+        switch (ModCompilKenobi.currentPlayerType[i]) {
           case PlayerType.Human:
-            TFGame.PlayerInputs[i] = AiMod.savedHumanPlayerInput[i];
+            TFGame.PlayerInputs[i] = ModCompilKenobi.savedHumanPlayerInput[i];
             break;
           case PlayerType.AiMod:
             TFGame.PlayerInputs[i] = AiMod.agents[i];
@@ -109,7 +109,7 @@ namespace ModCompilKenobi
 
     public bool HumanControlExists()
     {
-      return AiMod.savedHumanPlayerInput[this.playerIndex] != null;
+      return ModCompilKenobi.savedHumanPlayerInput[this.playerIndex] != null;
     }
     public override void Render()
     {
@@ -163,24 +163,24 @@ namespace ModCompilKenobi
         // Move up 
         if (this.input.MenuUp
             && HumanControlExists()
-            && (int)AiMod.currentPlayerType[playerIndex] > (int)PlayerType.Human)
+            && (int)ModCompilKenobi.currentPlayerType[playerIndex] > (int)PlayerType.Human)
         {
-          AiMod.currentPlayerType[playerIndex] = (PlayerType)(int)AiMod.currentPlayerType[playerIndex] - 1;
+          ModCompilKenobi.currentPlayerType[playerIndex] = (PlayerType)(int)ModCompilKenobi.currentPlayerType[playerIndex] - 1;
         }
         else if (this.input.MenuUp  
-                && (int)AiMod.currentPlayerType[playerIndex] > (int)PlayerType.AiMod)
+                && (int)ModCompilKenobi.currentPlayerType[playerIndex] > (int)PlayerType.AiMod)
         {
-          AiMod.currentPlayerType[playerIndex] = (PlayerType)(int)AiMod.currentPlayerType[playerIndex] - 1;
+          ModCompilKenobi.currentPlayerType[playerIndex] = (PlayerType)(int)ModCompilKenobi.currentPlayerType[playerIndex] - 1;
         }
 
         // Move down
         if (this.input.MenuDown 
-            && NAIMod.NAIMod.NAIModEnabled && (int)AiMod.currentPlayerType[playerIndex] < (int)PlayerType.NAIMod)
+            && NAIMod.NAIMod.NAIModEnabled && (int)ModCompilKenobi.currentPlayerType[playerIndex] < (int)PlayerType.NAIMod)
         {
-          AiMod.currentPlayerType[playerIndex] = (PlayerType)(int)AiMod.currentPlayerType[playerIndex] + 1;
+          ModCompilKenobi.currentPlayerType[playerIndex] = (PlayerType)(int)ModCompilKenobi.currentPlayerType[playerIndex] + 1;
         } else if (this.input.MenuDown  
-                  && (int)AiMod.currentPlayerType[playerIndex] < (int)PlayerType.AiMod) {
-          AiMod.currentPlayerType[playerIndex] = (PlayerType)(int)AiMod.currentPlayerType[playerIndex] + 1;
+                  && (int)ModCompilKenobi.currentPlayerType[playerIndex] < (int)PlayerType.AiMod) {
+          ModCompilKenobi.currentPlayerType[playerIndex] = (PlayerType)(int)ModCompilKenobi.currentPlayerType[playerIndex] + 1;
         }
       }
 
