@@ -19,16 +19,19 @@ namespace TowerfallAi.Mod {
 
 	public override void Resume()
     {
+        Logger.Info("Resume");
       int pauseDuration = (int)(DateTime.Now - creationTime).TotalSeconds;
 
       for (var i = 0; i < TFGame.Players.Length; i++)
       {
+        Logger.Info("Resume i = " + i);
         Player p = level.Session.CurrentLevel.GetPlayer(i);
         if (p != null)
         {
           p.pauseDuration += pauseDuration;
         }
       }
+        Logger.Info("end Resume");
       base.Resume();
     }
     

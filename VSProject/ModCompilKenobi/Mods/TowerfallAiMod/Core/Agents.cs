@@ -69,21 +69,23 @@ namespace TowerfallAi.Core {
         if (AiMod.ModAITraining)
         {
           //for training, we count only the human from the config
-          numberOfSlotOpen = TFGame.PlayerInputs.Length - nbHuman;
+          //numberOfSlotOpen = TFGame.PlayerInputs.Length - nbHuman;
+          numberOfSlotOpen = TFGame.PlayerInputs.Length; //todo getplayer 8 or 4
         }
         else
         {
-          //for the normal game, we count the number of joystick connected
-          for (int i = 0; i < TFGame.PlayerInputs.Length; i++)
-          {
-            // In training mode, don't count the joystick connected, all slot are open
-            // don't count the keyboard
-            if (TFGame.PlayerInputs[i] is null || TFGame.PlayerInputs[i] is KeyboardInput)
-            {
-              numberOfSlotOpen++;
-              continue;
-            }
-          }
+          numberOfSlotOpen = TFGame.PlayerInputs.Length; //todo getplayer 8 or 4
+                                                         //for the normal game, we count the number of joystick connected
+          //for (int i = 0; i < TFGame.PlayerInputs.Length; i++)
+          //{
+          //  // In training mode, don't count the joystick connected, all slot are open
+          //  // don't count the keyboard
+          //  if (TFGame.PlayerInputs[i] is null || TFGame.PlayerInputs[i] is KeyboardInput)
+          //  {
+          //    numberOfSlotOpen++;
+          //    continue;
+          //  }
+          //}
       }
       
         return numberOfSlotOpen;
@@ -134,7 +136,11 @@ namespace TowerfallAi.Core {
         }
 
         AgentConnections.Add(agentConnection);
-        TFGame.PlayerInputs[indexAgent] = agentConnection;
+        AiMod.nbPlayerType[indexAgent]++;
+        //TFGame.PlayerInputs[indexAgent] = agentConnection; //todo only if not human, save in a static
+        AiMod.agents[indexAgent] = agentConnection;
+        if (AiMod.currentPlayerType[indexAgent] == null || NAIMod.NAIMod.InputName.Equals(AiMod.currentPlayerType[indexAgent].GetType().ToString())) 
+          AiMod.currentPlayerType[indexAgent] = PlayerType.AiMod;//todo only if not human
         indexAgent++;
       }
 
@@ -182,7 +188,7 @@ namespace TowerfallAi.Core {
       levelLoaded = true;
     }
 
-    static void SendScenario() {
+    static void SendScenario(Level level) {
       Logger.Info("Send scenario to agents.");
 
       List<Task> tasks = new List<Task>();
@@ -191,6 +197,9 @@ namespace TowerfallAi.Core {
       for (int i = 0; i < AgentConnections.Count; i++) {
         var connection = AgentConnections[i];
         if (connection == null) continue;
+        
+        //TODO send aonly to agent playing
+
         string initMessage = JsonConvert.SerializeObject(new StateInit { index = connection.index });
         Logger.Info("Sending stateInit to agent {0}.".Format(connection.index));
         connection.Send(initMessage, frame);
@@ -210,6 +219,10 @@ namespace TowerfallAi.Core {
       for (int i = 0; i < AgentConnections.Count; i++) {
         var connection = AgentConnections[i];
         if (connection == null) continue;
+
+        //TODO send only to agent playing
+
+
         Logger.Info("Notify level load to agent {0}.".Format(connection.index));
         connection.Send(scenarioMessage, frame);
 
@@ -230,6 +243,7 @@ namespace TowerfallAi.Core {
     }
 
     private static void WaitAllAndClear(List<Task> tasks) {
+      //Logger.Info("WaitAllAndClear");
       TaskEx.WhenAll(tasks).Wait();
       tasks.Clear();
     }
@@ -314,7 +328,7 @@ namespace TowerfallAi.Core {
 
       if (!scenarioSent) {
         Logger.Info("Level not notified yet");
-        SendScenario();
+        SendScenario(level);
       }
 
       if (frame == 0) {
@@ -335,6 +349,10 @@ namespace TowerfallAi.Core {
         AgentConnection connection = AgentConnections[i];
         if (connection == null) continue;
 
+        //todo send only to agent playing
+
+        //Logger.Info("send update to agant python index = " + AgentConnections[i].index);
+
         connection.Send(serializedStateUpdate, frame);
         var task = TaskEx.Run(async () => {
           Data.Message message = await connection.ReceiveAsync(AiMod.Config.agentTimeout, cancelAgentCommunication);
@@ -352,7 +370,8 @@ namespace TowerfallAi.Core {
       }
 
       WaitAllAndClear(tasks);
-      
+      //Logger.Info("End WaitAllAndClear");
+
       frame++;
     }
 

@@ -81,7 +81,9 @@ namespace TowerfallAi.Mod {
     public override void Update() {
       nbUpdate++;
       if (AiMod.ModAIEnabled) {
+        //Logger.Info("before Update.RefreshInputFromAgents");
         Agents.RefreshInputFromAgents(this);
+        //Logger.Info("after Update.RefreshInputFromAgents");
       }
 
       if (NAIMod.NAIMod.NAIModEnabled)
@@ -90,11 +92,16 @@ namespace TowerfallAi.Mod {
 
         //if (0 == nbUpdate % 2) // TODO ?
         //{
+        //Logger.Info("before Update.NAIMod.NAIMod.AgentUpdate");
         NAIMod.NAIMod.AgentUpdate(this);
+        //Logger.Info("after Update.NAIMod.NAIMod.AgentUpdate");
         //}
       }
 
+        //Logger.Info("before originalUpdate");
+      //AiMod.logGeneralStatus();
       originalUpdate();
+      //Logger.Info("after originalUpdate");
 
 
       if ((bool)((MyMatchVariants)this.Session.MatchSettings.Variants).SpeedX1_1)

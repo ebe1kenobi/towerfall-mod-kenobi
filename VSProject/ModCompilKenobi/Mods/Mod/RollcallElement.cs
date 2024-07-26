@@ -1,43 +1,31 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ModCompilKenobi;
 using Monocle;
-using NAIMod;
 using Patcher;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using TowerFall;
-using TowerFall.Editor;
 using TowerfallAi.Core;
+using NAIMod;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace TowerfallAi.Mod
+namespace ModCompilKenobi
 {
   [Patch]
   public class MyRollcallElement : RollcallElement
   {
     public Text playerName;
-    public Image upArrow;
+    public Image upArrow; 
     public Image downArrow;
 
     public MyRollcallElement(int playerIndex) : base(playerIndex)
     {
       if (AiMod.ModAIEnabled || NAIMod.NAIMod.NAIModEnabled)
       {
-        this.state.SetCallbacks(3, new Func<int>(this.ChangePlayerTypeUpdate), new Action(this.ChangePlayerTypeJoined), new Action(this.ChangePlayerTypeLeaved));
-        if (NAIMod.NAIMod.savedPlayerInput[this.playerIndex] != null)
+        // set the player with gamepad connected to human control even if AI player is the current player => the human can utilise the 
+        // gamepad/keyboard to change the archer options
+        if (AiMod.savedHumanPlayerInput[this.playerIndex] != null)
         {
-          TFGame.PlayerInputs[this.playerIndex] = NAIMod.NAIMod.savedPlayerInput[this.playerIndex];
-          input = TFGame.PlayerInputs[playerIndex];
-        }
-        else {
-          // AUto set AI for human player with keyboard
-          if (NAIMod.NAIMod.NAIModNoKeyboardEnabled
-              && NAIMod.NAIMod.TowerfallKeyboardInputName.Equals(TFGame.PlayerInputs[this.playerIndex].GetType().ToString()))
-          {
-            NAIMod.NAIMod.savedPlayerInput[this.playerIndex] = TFGame.PlayerInputs[this.playerIndex];
-          }
+          TFGame.PlayerInputs[this.playerIndex] = AiMod.savedHumanPlayerInput[this.playerIndex];
+          input = TFGame.PlayerInputs[this.playerIndex];
         }
       }
 
@@ -52,7 +40,7 @@ namespace TowerfallAi.Mod
         positionText = new Vector2(Position.X, 10);
       }
 
-      if (NAIMod.NAIMod.IsThereOtherPlayerType(playerIndex))
+      if (ModCompilKenobi.IsThereOtherPlayerType(playerIndex))
       {
         upArrow = new Image(TFGame.Atlas["versus/playerIndicator"]);
         upArrow.FlipY = true;
@@ -76,18 +64,9 @@ namespace TowerfallAi.Mod
     }
 
     public void SetPlayerName() {
-      String name = "";
-
-      if (NAIMod.NAIMod.IsAgentPlaying(this.playerIndex))
-      {
-        name = "AI " + (this.playerIndex + 1);
-      }
-      else
-      {
-        name = "P" + (this.playerIndex + 1);
-      }
-      ((Text)playerName).text = name;
+      ((Text)playerName).text = ModCompilKenobi.GetPlayerTypePlaying(this.playerIndex) + (this.playerIndex + 1);
     }
+
     public static Vector2 GetPosition(int playerIndex)
     {
       if (!TF8PlayerMod.TF8PlayerMod.Mod8PEnabled)
@@ -98,31 +77,20 @@ namespace TowerfallAi.Mod
       return new Vector2((float)(0x12 + (0x29 * playerIndex)), 100f);
     }
 
-    public void ChangePlayerTypeJoined()
-    {
-
-    }
-
-    public void ChangePlayerTypeLeaved()
-    {
-
-    }
-
-    private bool CanChangePlayerTypeSelection() 
-    {
-      return 
-          NAIMod.NAIMod.NAIModEnabled
-          &&
-          TFGame.PlayerInputs[this.playerIndex] != NAIMod.NAIMod.AgentInputs[this.playerIndex]
-        ;
-    }
-
     private void SetAllPLayerInput() {
-      for (var i = 0; i < NAIMod.NAIMod.savedPlayerInput.Length; i++) {
-        if (NAIMod.NAIMod.savedPlayerInput[i] != null)
-        {
-          //replace the human control by the AI control before starting match
-          TFGame.PlayerInputs[i] = NAIMod.NAIMod.AgentInputs[i];
+      for (var i = 0; i < AiMod.currentPlayerType.Length; i++) {
+        switch (AiMod.currentPlayerType[i]) {
+          case PlayerType.Human:
+            TFGame.PlayerInputs[i] = AiMod.savedHumanPlayerInput[i];
+            break;
+          case PlayerType.AiMod:
+            TFGame.PlayerInputs[i] = AiMod.agents[i];
+            break;
+          case PlayerType.NAIMod:
+            TFGame.PlayerInputs[i] = NAIMod.NAIMod.AgentInputs[i];
+            break;
+          case PlayerType.None:
+            throw new Exception("Player Type not initialised for player " + i);
         }
       }
     }
@@ -135,144 +103,182 @@ namespace TowerfallAi.Mod
     public override void StartVersus()
     {
       // Assign real input
+      //Logger.Info("StartVersus");
+      //Logger.Info("avant SetAllPLayerInput");
+      //AiMod.logGeneralStatus();
       SetAllPLayerInput();
+      //Logger.Info("apres SetAllPLayerInput");
+      //AiMod.logGeneralStatus();
 
       base.StartVersus();
     }
 
+    //public bool CurrentPlayerIs(PlayerType type) {
+    //   return AiMod.currentPlayerType[playerIndex] == type;
+    //}
+
+    public bool HumanControlExists()
+    {
+      return AiMod.savedHumanPlayerInput[this.playerIndex] != null;
+    }
     public override void Render()
     {
       SetPlayerName();
 
-      if (NAIMod.NAIMod.IsThereOtherPlayerType(playerIndex))
+      if (rightArrow.Visible && ModCompilKenobi.IsThereOtherPlayerType(playerIndex))
       {
+        if (HumanControlExists()) {
+          if (ModCompilKenobi.CurrentPlayerIs(PlayerType.Human, playerIndex)) {
+            this.upArrow.Visible = false;
+            this.downArrow.Visible = true;
+          } 
+          else if (ModCompilKenobi.CurrentPlayerIs(PlayerType.AiMod, playerIndex))
+          {
+            this.upArrow.Visible = true;
+            if (NAIMod.NAIMod.NAIModEnabled)
+              this.downArrow.Visible = true;  
+            else
+              this.downArrow.Visible = false;  
+          }
+          else if (ModCompilKenobi.CurrentPlayerIs(PlayerType.NAIMod, playerIndex))
+          {
+            this.upArrow.Visible = true;
+            this.downArrow.Visible = false;
+          }
+        } else if (ModCompilKenobi.CurrentPlayerIs(PlayerType.AiMod, playerIndex)) {
+          this.upArrow.Visible = false;
+          this.downArrow.Visible = true;
+        } else if (ModCompilKenobi.CurrentPlayerIs(PlayerType.NAIMod, playerIndex)) {
+          this.upArrow.Visible = true;
+          this.downArrow.Visible = false;
+        }
+
         this.upArrow.Y = (float)(-68 + (double)this.arrowSine.Value * 3.0 + 6.0 * (this.rightArrowWiggle ? (double)this.arrowWiggle.Value : 0.0));
         this.downArrow.Y = (float)(-50.0 - (double)this.arrowSine.Value * 3.0 + 6.0 * (!this.rightArrowWiggle ? (double)this.arrowWiggle.Value : 0.0));
       }
-      base.Render();
-    }
-    public int ChangePlayerTypeUpdate()
-    {
-      if (this.finishedJoined)
-        return 2;
-
-      NAIMod.NAIMod.lastPlayerInput[this.playerIndex] = TFGame.PlayerInputs[this.playerIndex];
-
-      if (TFGame.PlayerInputs[this.playerIndex] != null)
+      else
       {
-        if (NAIMod.NAIMod.savedPlayerInput[this.playerIndex] == null)
-        {
-          NAIMod.NAIMod.savedPlayerInput[this.playerIndex] = TFGame.PlayerInputs[this.playerIndex];
-        }
-        else
-        {
-          NAIMod.NAIMod.savedPlayerInput[this.playerIndex] = null;
-        }
+        this.upArrow.Visible = false;
+        this.downArrow.Visible = false;
       }
 
-      return 0;
+      base.Render();
     }
-
     public override int NotJoinedUpdate()
     {
       if (this.input == null)
         return 0;
 
-      if ((this.input.MenuDown || this.input.MenuUp) && this.CanChangePlayerTypeSelection())
-      {
-        return 3;
+      if (ModCompilKenobi.IsThereOtherPlayerType(playerIndex)) { //at leat 2 player type
+        // Move up 
+        if (this.input.MenuUp
+            && HumanControlExists()
+            && (int)AiMod.currentPlayerType[playerIndex] > (int)PlayerType.Human)
+        {
+          AiMod.currentPlayerType[playerIndex] = (PlayerType)(int)AiMod.currentPlayerType[playerIndex] - 1;
+        }
+        else if (this.input.MenuUp  
+                && (int)AiMod.currentPlayerType[playerIndex] > (int)PlayerType.AiMod)
+        {
+          AiMod.currentPlayerType[playerIndex] = (PlayerType)(int)AiMod.currentPlayerType[playerIndex] - 1;
+        }
+
+        // Move down
+        if (this.input.MenuDown 
+            && NAIMod.NAIMod.NAIModEnabled && (int)AiMod.currentPlayerType[playerIndex] < (int)PlayerType.NAIMod)
+        {
+          AiMod.currentPlayerType[playerIndex] = (PlayerType)(int)AiMod.currentPlayerType[playerIndex] + 1;
+        } else if (this.input.MenuDown  
+                  && (int)AiMod.currentPlayerType[playerIndex] < (int)PlayerType.AiMod) {
+          AiMod.currentPlayerType[playerIndex] = (PlayerType)(int)AiMod.currentPlayerType[playerIndex] + 1;
+        }
       }
 
       if (!TF8PlayerMod.TF8PlayerMod.Mod8PEnabled)
-      {
         return base.NotJoinedUpdate();
-      }
 
-      if (this.input != null)
+      if (this.input.MenuBack && !base.MainMenu.Transitioning)
       {
-        if (this.input.MenuBack && !base.MainMenu.Transitioning)
+        for (int i = 0; i < 8; i++)
         {
-          for (int i = 0; i < 8; i++)
-          {
-            TFGame.Players[i] = false;
-          }
-          Sounds.ui_clickBack.Play(160f, 1f);
-          if ((MainMenu.RollcallMode == MainMenu.RollcallModes.Versus) || (MainMenu.RollcallMode == MainMenu.RollcallModes.Trials))
-          {
-            base.MainMenu.State = MainMenu.MenuState.Main;
-          }
-          else
-          {
-            base.MainMenu.State = MainMenu.MenuState.CoOp;
-          }
+          TFGame.Players[i] = false;
         }
-        else if (this.input.MenuLeft && this.CanChangeSelection)
+        Sounds.ui_clickBack.Play(160f, 1f);
+        if ((MainMenu.RollcallMode == MainMenu.RollcallModes.Versus) || (MainMenu.RollcallMode == MainMenu.RollcallModes.Trials))
         {
-          this.drawDarkWorldLock = false;
-          this.ChangeSelectionLeft();
-          Sounds.ui_move2.Play(160f, 1f);
-          this.arrowWiggle.Start();
-          this.rightArrowWiggle = false;
+          base.MainMenu.State = MainMenu.MenuState.Main;
         }
-        else if (this.input.MenuRight && this.CanChangeSelection)
+        else
         {
-          this.drawDarkWorldLock = false;
-          this.ChangeSelectionRight();
-          Sounds.ui_move2.Play(160f, 1f);
-          this.arrowWiggle.Start();
-          this.rightArrowWiggle = true;
+          base.MainMenu.State = MainMenu.MenuState.CoOp;
         }
-        else if (this.input.MenuAlt && GameData.DarkWorldDLC)
+      }
+      else if (this.input.MenuLeft && this.CanChangeSelection)
+      {
+        this.drawDarkWorldLock = false;
+        this.ChangeSelectionLeft();
+        Sounds.ui_move2.Play(160f, 1f);
+        this.arrowWiggle.Start();
+        this.rightArrowWiggle = false;
+      }
+      else if (this.input.MenuRight && this.CanChangeSelection)
+      {
+        this.drawDarkWorldLock = false;
+        this.ChangeSelectionRight();
+        Sounds.ui_move2.Play(160f, 1f);
+        this.arrowWiggle.Start();
+        this.rightArrowWiggle = true;
+      }
+      else if (this.input.MenuAlt && GameData.DarkWorldDLC)
+      {
+        this.drawDarkWorldLock = false;
+        this.altWiggle.Start();
+        Sounds.ui_altCostumeShift.Play(base.X, 1f);
+        if (this.archerType == ArcherData.ArcherTypes.Normal)
         {
-          this.drawDarkWorldLock = false;
-          this.altWiggle.Start();
-          Sounds.ui_altCostumeShift.Play(base.X, 1f);
-          if (this.archerType == ArcherData.ArcherTypes.Normal)
+          this.archerType = ArcherData.ArcherTypes.Alt;
+        }
+        else
+        {
+          this.archerType = ArcherData.ArcherTypes.Normal;
+        }
+        this.portrait.SetCharacter(this.CharacterIndex, this.archerType, 1);
+      }
+      else if ((this.input.MenuConfirmOrStart && !TFGame.CharacterTaken(this.CharacterIndex)) && (TFGame.PlayerAmount < this.MaxPlayers))
+      {
+        if (ArcherData.Get(this.CharacterIndex, this.archerType).RequiresDarkWorldDLC && !GameData.DarkWorldDLC)
+        {
+          this.drawDarkWorldLock = true;
+          if ((this.darkWorldLockEase < 1f) || !TFGame.OpenStoreDarkWorldDLC())
           {
-            this.archerType = ArcherData.ArcherTypes.Alt;
+            this.portrait.Shake();
+            this.shakeTimer = 30f;
+            Sounds.ui_invalid.Play(base.X, 1f);
+            if (TFGame.PlayerInputs[this.playerIndex] != null)
+            {
+              TFGame.PlayerInputs[this.playerIndex].Rumble(1f, 20);
+            }
           }
-          else
-          {
-            this.archerType = ArcherData.ArcherTypes.Normal;
-          }
+          return 0;
+        }
+        if ((this.input.MenuAlt2Check && (this.archerType == ArcherData.ArcherTypes.Normal)) && (ArcherData.SecretArchers[this.CharacterIndex] != null))
+        {
+          this.archerType = ArcherData.ArcherTypes.Secret;
           this.portrait.SetCharacter(this.CharacterIndex, this.archerType, 1);
         }
-        else if ((this.input.MenuConfirmOrStart && !TFGame.CharacterTaken(this.CharacterIndex)) && (TFGame.PlayerAmount < this.MaxPlayers))
+        this.portrait.Join(false);
+        TFGame.Players[this.playerIndex] = true;
+        TFGame.AltSelect[this.playerIndex] = this.archerType;
+        if (TFGame.PlayerInputs[this.playerIndex] != null)
         {
-          if (ArcherData.Get(this.CharacterIndex, this.archerType).RequiresDarkWorldDLC && !GameData.DarkWorldDLC)
-          {
-            this.drawDarkWorldLock = true;
-            if ((this.darkWorldLockEase < 1f) || !TFGame.OpenStoreDarkWorldDLC())
-            {
-              this.portrait.Shake();
-              this.shakeTimer = 30f;
-              Sounds.ui_invalid.Play(base.X, 1f);
-              if (TFGame.PlayerInputs[this.playerIndex] != null)
-              {
-                TFGame.PlayerInputs[this.playerIndex].Rumble(1f, 20);
-              }
-            }
-            return 0;
-          }
-          if ((this.input.MenuAlt2Check && (this.archerType == ArcherData.ArcherTypes.Normal)) && (ArcherData.SecretArchers[this.CharacterIndex] != null))
-          {
-            this.archerType = ArcherData.ArcherTypes.Secret;
-            this.portrait.SetCharacter(this.CharacterIndex, this.archerType, 1);
-          }
-          this.portrait.Join(false);
-          TFGame.Players[this.playerIndex] = true;
-          TFGame.AltSelect[this.playerIndex] = this.archerType;
-          if (TFGame.PlayerInputs[this.playerIndex] != null)
-          {
-            TFGame.PlayerInputs[this.playerIndex].Rumble(1f, 20);
-          }
-          this.shakeTimer = 20f;
-          if (TFGame.PlayerAmount == this.MaxPlayers)
-          {
-            this.ForceStart();
-          }
-          return 1;
+          TFGame.PlayerInputs[this.playerIndex].Rumble(1f, 20);
         }
+        this.shakeTimer = 20f;
+        if (TFGame.PlayerAmount == this.MaxPlayers)
+        {
+          this.ForceStart();
+        }
+        return 1;
       }
       return 0;
     }

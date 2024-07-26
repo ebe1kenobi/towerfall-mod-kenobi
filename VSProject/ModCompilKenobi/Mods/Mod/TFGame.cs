@@ -5,7 +5,8 @@ using Patcher;
 using TowerFall;
 using TowerfallAi.Core;
 
-namespace TowerfallAi.Mod {
+namespace ModCompilKenobi
+{
   [Patch]
   public class ModTFGame : TFGame {
     // This allows identifying that TowerFall.exe is patched.
@@ -17,7 +18,7 @@ namespace TowerfallAi.Mod {
     [STAThread]
     public static void Main(string[] args) {
       try {
-        ModCompilKenobi.ModCompilKenobi.InitLog();
+        ModCompilKenobi.InitLog();
         AiMod.ParseArgs(args);
         NAIMod.NAIMod.ParseArgs(args);
         TF8PlayerMod.TF8PlayerMod.ParseArgs(args);
@@ -35,6 +36,11 @@ namespace TowerfallAi.Mod {
       ptr = typeof(TFGame).GetMethod("$original_Update").MethodHandle.GetFunctionPointer();
       originalUpdate = (Action<GameTime>)Activator.CreateInstance(typeof(Action<GameTime>), this, ptr);
 
+      for (var i = 0; i < TFGame.Players.Length; i++)
+      {
+        AiMod.nbPlayerType[i] = 0;
+        AiMod.currentPlayerType[i] = PlayerType.None;
+      }
       if (AiMod.ModAIEnabled) {
         this.InactiveSleepTime = new TimeSpan(0);
 
@@ -55,11 +61,6 @@ namespace TowerfallAi.Mod {
       Logger.Info($"ModVariantControlGhost version: {ModVariantControlGhost.ModVariantControlGhost.ModVariantControlGhostVersion}");
       Logger.Info($"TowerfallModPlayTag version: {TowerfallModPlayTag.TowerfallModPlayTag.ModPlayTag}");
       Logger.Info($"NAIMod version: {NAIMod.NAIMod.ModNativeAiModVersion}  Enabled: {NAIMod.NAIMod.NAIModEnabled}");
-      if (NAIMod.NAIMod.NAIModEnabled)
-      {
-        originalInitialize();
-        return;
-      }
 
       if (AiMod.ModAIEnabled)
       {
@@ -74,6 +75,16 @@ namespace TowerfallAi.Mod {
 
     public override void Update(GameTime gameTime) {
 
+      if (NAIMod.NAIMod.NAIModEnabled || AiMod.ModAIEnabled) {
+        //ModCompilKenobi.ModCompilKenobi.gameTime = gameTime;
+        //ModCompilKenobi.ModCompilKenobi.Update(originalUpdate);
+
+        ModCompilKenobi.gameTime = gameTime;
+        ModCompilKenobi.Update(originalUpdate);
+        return;
+      }
+      
+/*
       if (NAIMod.NAIMod.NAIModEnabled)
       {
         NAIMod.NAIMod.gameTime = gameTime;
@@ -87,7 +98,7 @@ namespace TowerfallAi.Mod {
         AiMod.Update(originalUpdate);
         return;
       }
-
+*/
       originalUpdate(gameTime);
 
     }
@@ -112,17 +123,5 @@ namespace TowerfallAi.Mod {
         Monocle.Draw.SpriteBatch.End();
       }
     }
-
-
-    //public override void OnExiting(object sender, EventArgs args)
-    //{
-    //  base.OnExiting(sender, args);
-
-    //  if (NativeAiMod.ModNativeAIEnabled)
-    //  {
-    //    NativeAiMod.DestroyAgent();
-    //  }
-    //}
-  
-}
+  }
 }

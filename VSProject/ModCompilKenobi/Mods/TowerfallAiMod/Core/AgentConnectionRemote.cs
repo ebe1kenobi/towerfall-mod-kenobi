@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ModCompilKenobi;
 using Newtonsoft.Json;
 using TowerfallAi.Data;
 
@@ -11,6 +12,7 @@ namespace TowerfallAi.Core {
     public AgentConnectionRemote(int index) : base(index) { }
 
     public override void Send(string message, int frame) {
+      //Logger.Info("AgentConnectionRemote.Send " + message);
       Connection.Write(message);
     }
 

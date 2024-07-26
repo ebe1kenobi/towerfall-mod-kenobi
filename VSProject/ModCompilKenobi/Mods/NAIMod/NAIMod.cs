@@ -3,6 +3,7 @@ using System;
 using TowerFall;
 using ModCompilKenobi;
 using TowerfallAi.Core;
+using System.Collections.ObjectModel;
 
 namespace NAIMod
 {
@@ -13,11 +14,10 @@ namespace NAIMod
     public const string InputName = "NAIMod.Input";
     public const string TowerfallKeyboardInputName = "TowerFall.KeyboardInput";
     public static GameTime gameTime;
-    private static bool isAgentReady = false;
+    public static bool isAgentReady = false;
     private static Agent[] agents = new Agent[TFGame.Players.Length];
     public static PlayerInput[] AgentInputs = new PlayerInput[TFGame.Players.Length];
-    public static PlayerInput[] savedPlayerInput = new PlayerInput[TFGame.Players.Length];
-    public static PlayerInput[] lastPlayerInput = new PlayerInput[TFGame.Players.Length];
+
     public static bool NAIModEnabled { get; private set;}
     public static bool NAIModNoKeyboardEnabled { get; private set;}
     
@@ -36,7 +36,6 @@ namespace NAIMod
           NAIModNoKeyboardEnabled = false;
         }
       }
-      
     }
 
     public static void Update(Action<GameTime> originalUpdate)
@@ -57,29 +56,15 @@ namespace NAIMod
       }
     }
 
-    public static bool IsAgentPlaying(int playerIndex) {
-      return NAIMod.savedPlayerInput[playerIndex] != null 
-              || NAIMod.InputName.Equals(TFGame.PlayerInputs[playerIndex].GetType().ToString());
-
-    }
-    public static bool IsThereOtherPlayerType(int playerIndex)
-    {
-      return ! (NAIMod.savedPlayerInput[playerIndex] == null
-              && NAIMod.InputName.Equals(TFGame.PlayerInputs[playerIndex].GetType().ToString()));
-    }
-
     public static void CreateAgent()
     {
-      Logger.Info("NativeAiMod.CreateAgent");
-      Logger.Info("NativeAiMod.TFGame.Players.Length = " + TFGame.Players.Length);
-      Logger.Info("NativeAiMod.agents.Length = " + agents.Length);
       //detect first player slot free
-      for (int i = 0; i < TF8PlayerMod.TF8PlayerMod.GetPlayerCount(); i++)
+      for (int i = 0; i < TF8PlayerMod.TF8PlayerMod.GetPlayerCount(); i++) //todo use everywhere
       {
-        Logger.Info("NativeAiMod.createAgent i = " + i);
         // create an agent for each player
         AgentInputs[i] = new Input(i);
         agents[i] = new Agent(i, AgentInputs[i]);
+        AiMod.nbPlayerType[i]++;
         Logger.Info("Agent " + i + " Created");
         //if (null != TFGame.PlayerInputs[i] && NAIModNoKeyboardEnabled && TowerfallKeyboardInputName.Equals(TFGame.PlayerInputs[i].GetType().ToString()))
         //{
@@ -96,7 +81,8 @@ namespace NAIMod
         //TFGame.PlayerInputs[i] = new Input(i);
         //agents[i] = new Agent(i, TFGame.PlayerInputs[i]);
         TFGame.PlayerInputs[i] = AgentInputs[i];
-        Logger.Info("Agent " + i + " set to free input");
+        AiMod.currentPlayerType[i] = PlayerType.NAIMod;
+        //Logger.Info("Agent " + i + " set to free slot");
       }
 
       isAgentReady = true;
@@ -104,11 +90,15 @@ namespace NAIMod
 
     public static void SetAgentLevel(Level level)
     {
+        Logger.Info("NAIMod.SetAgentLevel");
       for (var i = 0; i < TFGame.Players.Length; i++)
       {
         if (!TFGame.Players[i]) continue;
+        if (null == TFGame.PlayerInputs[i]) continue;
         if (! InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString())) continue;
         //set level reference once, at Level creation
+        Logger.Info("NAIMod.SetAgentLevel i = " + i);
+
         agents[i].SetLevel(level);
       }
     }
@@ -118,8 +108,11 @@ namespace NAIMod
 
       for (int i = 0; i < TFGame.PlayerInputs.Length; i++)
       {
-        if (level.GetPlayer(i) == null) continue;
-        if (!NAIMod.InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString())) continue;
+        if (!(ModCompilKenobi.ModCompilKenobi.CurrentPlayerIs(PlayerType.NAIMod, i)
+            && ModCompilKenobi.ModCompilKenobi.IsAgentPlaying(i, level)))
+          continue;
+        //if (level.GetPlayer(i) == null) continue;
+        //if (!NAIMod.InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString())) continue; //todo not necessary anymore
         agents[i].Play();
       }
     }

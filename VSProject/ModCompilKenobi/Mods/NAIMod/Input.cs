@@ -1,4 +1,5 @@
 ﻿using TowerFall;
+using ModCompilKenobi;
 
 namespace NAIMod
 {

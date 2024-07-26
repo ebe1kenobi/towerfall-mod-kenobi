@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using Monocle;
 using Patcher;
 using TowerFall;
-using TowerfallAi.Api;
 
 namespace ModCompilKenobi
 {
@@ -12,9 +10,10 @@ namespace ModCompilKenobi
     public ModPlayerIndicator(Vector2 offset, int playerIndex, bool crown)
       : base(offset, playerIndex, crown)
     {
-      if (NAIMod.NAIMod.IsAgentPlaying(playerIndex))
+      if (! ModCompilKenobi.CurrentPlayerIs(PlayerType.Human, playerIndex))
+      //if (ModCompilKenobi.IsAgentPlaying(playerIndex))
       {
-        base.text = "AI " + (playerIndex + 1).ToString();
+        base.text = ModCompilKenobi.GetPlayerTypePlaying(playerIndex) + " " + (playerIndex + 1).ToString();
       }
     }
   }

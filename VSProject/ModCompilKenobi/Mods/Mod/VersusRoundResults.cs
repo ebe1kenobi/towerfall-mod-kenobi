@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Monocle;
+﻿using Monocle;
 using Patcher;
 using System.Collections.Generic;
 using TowerFall;
@@ -17,6 +16,12 @@ namespace ModCompilKenobi
     {
       if (this.Components == null)
         return;
+
+      for (var i = 0; i < this.crowns.Length; i++)
+      {
+        this.crowns[i].Position.X = 100; // 126 origin
+      }
+
       for (var i = 0; i < this.Components.Count; i++) 
       {
         if (this.Components[i].GetType().ToString() != "Monocle.Text") continue;
@@ -24,10 +29,15 @@ namespace ModCompilKenobi
 
         if (text.text.Length == 0) continue;
         if (! text.text[0].ToString().Equals("P")) continue;
+        if (text.text[1].ToString().Equals("-")) continue; //second pass for NAI-1 AI-1 P-1
         int playerIndex = int.Parse(text.text[1].ToString()) - 1;
-        if (NAIMod.NAIMod.IsAgentPlaying(playerIndex)) {
-          text.text = "AI " + (playerIndex + 1);
-          text.Position.X -= 7;
+        //if (ModCompilKenobi.IsAgentPlaying(playerIndex)) {
+        if (!ModCompilKenobi.CurrentPlayerIs(PlayerType.Human, playerIndex)) { 
+          text.text = ModCompilKenobi.GetPlayerTypePlaying(playerIndex) + " " + (playerIndex + 1);
+          text.Position.X -= 26;
+        } else if (text.Position.X != 26) {
+          text.text = ModCompilKenobi.GetPlayerTypePlaying(playerIndex) + "" + (playerIndex + 1);
+          text.Position.X -= 26;
         }
       }
       base.Render();

@@ -101,6 +101,9 @@ namespace TowerfallAi.Core {
     }
 
     public void Write(string text) {
+      //Logger.Info("RemoteConnection.Write " + text);
+      //Logger.Info("socket" + socket.ToString());
+
       byte[] payload = Encoding.ASCII.GetBytes(text);
       int size = payload.Length;
       if (size > maxMessageSize) {
@@ -111,6 +114,8 @@ namespace TowerfallAi.Core {
       header[1] = (byte)(size & 0x00FF);
       socket.Send(header);
       socket.Send(payload);
+      //Logger.Info("end send");
+
     }
 
     public void Dispose() {

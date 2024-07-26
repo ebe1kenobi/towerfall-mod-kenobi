@@ -10,7 +10,6 @@ using Newtonsoft.Json.Linq;
 using TowerFall;
 using ModCompilKenobi;
 using TowerfallAi.Data;
-using static TowerFall.MatchSettings;
 
 namespace TowerfallAi.Core {
   /// <summary>
@@ -25,11 +24,16 @@ namespace TowerfallAi.Core {
     public const string ModAiVersion = "v0.1.1"; 
 
     private const string poolName = "default";
-    public const string BaseDirectory = "aimod";
+    //public const string BaseDirectory = "aimod";
     private const string defaultConfigName = "config.json";
 
     public static bool AgentConnected = false;
+    public static AgentConnection[] agents = new AgentConnection[TFGame.Players.Length];
 
+    public static PlayerInput[] savedHumanPlayerInput = new PlayerInput[TFGame.Players.Length];
+    public static int[] nbPlayerType = new int[TFGame.Players.Length];
+    public static PlayerType[] currentPlayerType = new PlayerType[TFGame.Players.Length];
+    public static bool isHumanPlayerTypeSaved = false;
 
     // If this is set to false, this mod should do no effect.
     public static bool ModAIEnabled { get; private set;}
@@ -49,7 +53,7 @@ namespace TowerfallAi.Core {
 
     public static readonly TimeSpan DefaultAgentTimeout = new TimeSpan(0, 0, 10);
 
-    public static string ConfigPath = Util.PathCombine(BaseDirectory, defaultConfigName);
+    public static string ConfigPath = Util.PathCombine(ModCompilKenobi.ModCompilKenobi.BaseDirectory, defaultConfigName);
 
     public static MatchConfig Config { get; private set; }
 
@@ -69,22 +73,50 @@ namespace TowerfallAi.Core {
     private static ResetOperation resetOperation;
     private static CancellationTokenSource ctsSession = new CancellationTokenSource();
 
-    public static GameTime gameTime;
-    static Stopwatch gameTimeWatch;
+    //public static GameTime gameTime;
+    public static Stopwatch gameTimeWatch;
     private static TimeSpan totalGameTime = new TimeSpan();
     private static long totalFrame = 0;
 
     private static readonly Stopwatch fpsWatch = new Stopwatch();
 
-    private static bool loggedScreenSize;
+    public static bool loggedScreenSize;
 
     private static bool sessionEnded;
 
     static Mutex loadContentMutex = new Mutex(false, "Towerfall_loadContent");
 
     static bool rematch;
-    static TimeSpan logTimeInterval = new TimeSpan(0, 1, 0);
+    public static TimeSpan logTimeInterval = new TimeSpan(0, 1, 0);
     
+    //public static void logGeneralStatus() {
+    //    Logger.Info("logGeneralStatus");
+    //  //public static AgentConnection[] agents = new AgentConnection[TFGame.Players.Length];
+
+    //  //public static PlayerInput[] savedHumanPlayerInput = new PlayerInput[TFGame.Players.Length];
+    //  //public static int[] nbPlayerType = new int[TFGame.Players.Length];
+    //  //public static PlayerType[] currentPlayerType = new PlayerType[TFGame.Players.Length];
+    //  //public static bool isHumanPlayerTypeSaved = false;
+    //  for (var i = 0; i < agents.Length; i++)   {
+    //    //Logger.Info("savedHumanPlayerInput["+i+"] == null : " + (savedHumanPlayerInput[i] == null));
+    //    if (null != savedHumanPlayerInput[i])
+    //      Logger.Info("savedHumanPlayerInput["+i+ "].GetType() : " + savedHumanPlayerInput[i].GetType());
+
+    //    Logger.Info("nbPlayerType[" + i+"] : " + nbPlayerType[i]);
+    //    //Logger.Info("currentPlayerType[" + i+"] == null : " + ( null == currentPlayerType[i]));
+    //    if (null != currentPlayerType[i])
+    //      Logger.Info("currentPlayerType[" + i + "] : " + currentPlayerType[i]);
+
+    //    Logger.Info("isHumanPlayerTypeSaved : " + isHumanPlayerTypeSaved);
+
+    //    Logger.Info("TFGame.Players["+i+"] : " + TFGame.Players[i]);
+    //    if (TFGame.PlayerInputs[i] != null)
+    //      Logger.Info("TFGame.PlayerInputs[" + i + "] : " + TFGame.PlayerInputs[i].GetType());
+
+
+    //  }
+    //}
+
     public class ReconfigOperation {
       public MatchConfig Config { get; set; }
       public List<RemoteConnection> Connections { get; set; }
@@ -95,11 +127,12 @@ namespace TowerfallAi.Core {
     }
 
     public static void ParseArgs(string[] args) {
+      ModAIEnabled = true;
       for (int i = 0; i < args.Length; i++)
       {
-        if (args[i] == "--aimod")
+        if (args[i] == "--noaimod")
         {
-          ModAIEnabled = true;
+          ModAIEnabled = false;
         }
         if (args[i] == "--aimodtraining")
         {
@@ -109,10 +142,10 @@ namespace TowerfallAi.Core {
       }
     }
 
-    public static int GetPlayerCount()
-    {
-      return TF8PlayerMod.TF8PlayerMod.Mod8PEnabled ? 8 : 4; 
-    }
+    //public static int GetPlayerCount()
+    //{
+    //  return TF8PlayerMod.TF8PlayerMod.Mod8PEnabled ? 8 : 4; 
+    //}
 
     public static void LoadConfigFromPath() {
       if (!File.Exists(ConfigPath)) {
@@ -138,8 +171,6 @@ namespace TowerfallAi.Core {
     public static void PostGameInitialize() {
       gameTimeWatch = Stopwatch.StartNew();
 
-      //Util.CreateDirectory(BaseDirectory);
-      //Logger.Init(BaseDirectory);
 
       Agents.Init();
       ctsSession = new CancellationTokenSource();
@@ -159,7 +190,7 @@ namespace TowerfallAi.Core {
 
       Logger.Info("Post Game Initialize.");
     }
-
+/*
     public static void Update(Action<GameTime> originalUpdate) {
       int fps = 0;
       if (Config?.fps > 0)
@@ -212,7 +243,7 @@ namespace TowerfallAi.Core {
         gameTimeWatch.Restart();
       }
     }
-
+*/
     public static void HandleFailure(Exception ex) {
       if (ex is SocketException) {
         Logger.Info($"Connection error. Session will stop and wait for another config. Exception:\n  {ex}");
@@ -292,7 +323,8 @@ namespace TowerfallAi.Core {
       Agents.SessionRestarted();
     }
 
-    public static GameTime GetGameTime() {
+    public static GameTime GetGameTime()
+    {
       return new GameTime(totalGameTime, ellapsedGameTime);
     }
 
@@ -674,7 +706,7 @@ namespace TowerfallAi.Core {
       }
     }
 
-    private static void LogGameTime() {
+    public static void LogGameTime() {
       Logger.Info("{0}s, {1} frames".Format((long)GetGameTime().TotalGameTime.TotalSeconds, totalFrame));
     }
 
