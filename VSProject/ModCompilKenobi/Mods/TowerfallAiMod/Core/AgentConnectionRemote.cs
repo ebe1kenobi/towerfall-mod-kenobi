@@ -12,12 +12,10 @@ namespace TowerfallAi.Core {
     public AgentConnectionRemote(int index) : base(index) { }
 
     public override void Send(string message, int frame) {
-      //Logger.Info("AgentConnectionRemote.Send " + message);
       Connection.Write(message);
     }
 
     public override async Task<Message> ReceiveAsync(TimeSpan timeout = default, CancellationToken cancellationToken = default) {
-      //Logger.Info("AgentConnectionRemote.ReceiveAsync");
       return JsonConvert.DeserializeObject<Message>(await Connection.ReadAsync(timeout, cancellationToken));
     }
 

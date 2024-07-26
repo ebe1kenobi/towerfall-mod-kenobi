@@ -465,23 +465,17 @@ namespace TowerfallAi.Core {
       int indexRemote = Agents.CountHumanConnections(Config.agents);
       int indexForTeam = 0;
       for (int i = 0; i < Config.agents.Count; i++) {
-        Logger.Info("team : i " + i);
-
         var agent = Config.agents[i];
         // when human in agent config, the distribution is erronous when Teams are involved !
         // because the human joystick are always at the beginning and the remote at the end
         // if human, we need to calculate the right index Like in TFGame.PlayerInput
         if (agent.type == "human")
         {
-          Logger.Info("human : indexHuman " + indexHuman); //TODO delete comment
-          Logger.Info("human : indexForTeam " + indexHuman);
           indexForTeam = indexHuman;
           indexHuman++;
         }
         else
         {
-          Logger.Info("remote : indexRemote " + indexRemote);
-          Logger.Info("remote : indexForTeam " + indexHuman);
           indexForTeam = indexRemote;
           indexRemote++;
         }
@@ -489,7 +483,6 @@ namespace TowerfallAi.Core {
         TFGame.Players[indexForTeam] = true;
         TFGame.Characters[indexForTeam] = agent.GetArcherIndex();
         TFGame.AltSelect[indexForTeam] = agent.GetArcherType();
-        Logger.Info("team " + i + " type : " + agent.type + " :  agent.GetTeam() " + agent.GetTeam().ToString());
 
         matchSettings.Teams[indexForTeam] = agent.GetTeam();
       }

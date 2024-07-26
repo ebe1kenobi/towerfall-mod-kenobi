@@ -77,15 +77,12 @@ namespace NAIMod
 
     public static void SetAgentLevel(Level level)
     {
-        Logger.Info("NAIMod.SetAgentLevel");
       for (var i = 0; i < TFGame.Players.Length; i++)
       {
         if (!TFGame.Players[i]) continue;
         if (null == TFGame.PlayerInputs[i]) continue;
         if (! InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString())) continue;
         //set level reference once, at Level creation
-        Logger.Info("NAIMod.SetAgentLevel i = " + i);
-
         agents[i].SetLevel(level);
       }
     }
