@@ -4,6 +4,7 @@ import os
 import random
 import signal
 import time
+import threading
 from io import TextIOWrapper
 from typing import Any, Callable, Dict, List, Mapping, Optional
 
@@ -90,6 +91,21 @@ class Towerfall:
         agents.append(SimpleAgentLevel0(connections[i]))
       i += 1
 
+    ##################################################
+    # EAch agent is a thread (game still freeze sometime when playing)
+    ##################################################
+    # threads = []
+    # for agent in agents:
+    #   thread = threading.Thread(target=agent.run)
+    #   threads.append(thread)
+    #   thread.start()
+
+    # for thread in threads:
+    #   thread.join()
+
+    ##################################################
+    # To use training comment the thread above and decomment the code below :
+    ##################################################
     while True: #TODO : use thread and each agent read from its connection : each agent -> thread
       # Read the state of the game then replies with an action.
       for connection, agent in zip(connections, agents):

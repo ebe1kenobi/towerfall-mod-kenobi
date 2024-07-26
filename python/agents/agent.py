@@ -23,6 +23,12 @@ class Agent:
     self.players = []
     # self.attack_achers = attack_archers
 
+  def run(self):
+    while True:
+      game_state = self.connection.read_json()
+      # logging.info('towerfall.run : agent.act')
+      self.act(game_state)    
+
   def act(self, game_state: Mapping[str, Any]):
     '''
     Handles a game message.
