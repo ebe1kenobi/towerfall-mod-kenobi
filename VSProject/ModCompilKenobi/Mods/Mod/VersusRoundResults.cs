@@ -29,15 +29,14 @@ namespace ModCompilKenobi
 
         if (text.text.Length == 0) continue;
         if (! text.text[0].ToString().Equals("P")) continue;
-        if (text.text[1].ToString().Equals("-")) continue; //second pass for NAI-1 AI-1 P-1
+        if (text.text[1].ToString().Equals(" ")) continue; //second pass for NAI 1 AI 1 P 1
         int playerIndex = int.Parse(text.text[1].ToString()) - 1;
-        //if (ModCompilKenobi.IsAgentPlaying(playerIndex)) {
         if (!ModCompilKenobi.CurrentPlayerIs(PlayerType.Human, playerIndex)) { 
           text.text = ModCompilKenobi.GetPlayerTypePlaying(playerIndex) + " " + (playerIndex + 1);
-          text.Position.X -= 26;
-        } else if (text.Position.X != 26) {
-          text.text = ModCompilKenobi.GetPlayerTypePlaying(playerIndex) + "" + (playerIndex + 1);
-          text.Position.X -= 26;
+          text.Position.X -= 30;
+        } else if (text.Position.X != 30) {
+          text.text = ModCompilKenobi.GetPlayerTypePlaying(playerIndex) + " " + (playerIndex + 1);
+          text.Position.X -= 30;
         }
       }
       base.Render();

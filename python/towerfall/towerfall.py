@@ -49,7 +49,7 @@ class Towerfall:
     self.towerfall_path = towerfall_path
     self.towerfall_path_exe = os.path.join(self.towerfall_path, 'TowerFall.exe')
     self.pool_name = 'default'
-    self.pool_path = os.path.join(self.towerfall_path, 'aimod', 'pools', self.pool_name)
+    self.pool_path = os.path.join(self.towerfall_path, 'modcompilkenobi', 'pools', self.pool_name)
     self.timeout = timeout
     self.verbose = verbose
     tries = 0
@@ -90,7 +90,7 @@ class Towerfall:
         agents.append(SimpleAgentLevel0(connections[i]))
       i += 1
 
-    while True:
+    while True: #TODO : use thread and each agent read from its connection : each agent -> thread
       # Read the state of the game then replies with an action.
       for connection, agent in zip(connections, agents):
         # logging.info('towerfall.run : connection.read_json')

@@ -27,33 +27,17 @@ namespace ModCompilKenobi
     public const string ModCompilKenobiVersion = "v0.2.0";
     public const string BaseDirectory = "modcompilkenobi";
 
-    //use in archer selection screen to change between human or AI
-    //public static PlayerInput[] savedHumanPlayerInput = new PlayerInput[TFGame.Players.Length];
-    //public static int[] nbPlayerType = new int[TFGame.Players.Length];
-    //public static PlayerType[] currentPlayerType = new PlayerType[TFGame.Players.Length];
-    //public static bool isHumanPlayerTypeSaved = false;
-    //public static PlayerInput[] lastPlayerInput = new PlayerInput[TFGame.Players.Length];
-
     public static GameTime gameTime;
     public static Stopwatch gameTimeWatch;
     private static readonly Stopwatch fpsWatch = new Stopwatch();
-    //private static TimeSpan totalGameTime = new TimeSpan();
-    //private static long totalFrame = 0;
-    //private static readonly TimeSpan ellapsedGameTime = new TimeSpan(10000000 / 60);
 
     public static void InitLog() {
       Util.CreateDirectory(ModCompilKenobi.BaseDirectory);
       Logger.Init(ModCompilKenobi.BaseDirectory);
     }
 
-    //public static GameTime GetGameTime()
-    //{
-    //  return new GameTime(totalGameTime, ellapsedGameTime);
-    //}
-
     public static bool CurrentPlayerIs(PlayerType type, int playerIndex)
     {
-      //Logger.Info("CurrentPlayerIs" + playerIndex);
       return AiMod.currentPlayerType[playerIndex] == type;
     }
 
@@ -69,15 +53,10 @@ namespace ModCompilKenobi
 
     public static bool IsAgentPlaying(int playerIndex, Level level)
     {
-      //Logger.Info("IsAgentPlaying" + playerIndex);
       return level.GetPlayer(playerIndex) != null && (AiMod.currentPlayerType[playerIndex] == PlayerType.AiMod || AiMod.currentPlayerType[playerIndex] == PlayerType.NAIMod);
-      //return ModCompilKenobi.savedHumanPlayerInput[playerIndex] != null
-      //        || NAIMod.NAIMod.InputName.Equals(TFGame.PlayerInputs[playerIndex].GetType().ToString());
     }
     public static bool IsThereOtherPlayerType(int playerIndex)
     {
-      //Logger.Info("IsThereOtherPlayerType => nbPlayerType[" + playerIndex + "] = " + AiMod.nbPlayerType[playerIndex]);
-
       return AiMod.nbPlayerType[playerIndex] > 1;
     }
 
@@ -90,9 +69,6 @@ namespace ModCompilKenobi
           AiMod.nbPlayerType[i]++;
           AiMod.currentPlayerType[i] = PlayerType.Human;
           AiMod.savedHumanPlayerInput[i] = TFGame.PlayerInputs[i];
-
-          Logger.Info("AiMod.nbPlayerType["+ i + "] = "  + AiMod.nbPlayerType[i]);
-          Logger.Info("AiMod.currentPlayerType[" + i + "] = " + AiMod.currentPlayerType[i]);
         }
         AiMod.isHumanPlayerTypeSaved = true;
       }

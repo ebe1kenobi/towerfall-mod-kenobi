@@ -29,6 +29,13 @@ class Agent:
     '''
     # logging.info('agent.act')
 
+    if game_state['type'] == 'notplaying':
+      # logging.info('game_state.type = ' + str(game_state['type']))
+      # 'notplaying' is sent every time a match series starts for an agents not selected to play
+      # Acknowledge the init message.
+      self.connection.send_json(dict(type='result', success=True, id = game_state['id']))
+      return True    
+
     # There are three main types to handle, 'init', 'scenario' and 'update'.
     # Check 'type' to handle each accordingly.
     if game_state['type'] == 'init':

@@ -103,19 +103,9 @@ namespace ModCompilKenobi
     public override void StartVersus()
     {
       // Assign real input
-      //Logger.Info("StartVersus");
-      //Logger.Info("avant SetAllPLayerInput");
-      //AiMod.logGeneralStatus();
       SetAllPLayerInput();
-      //Logger.Info("apres SetAllPLayerInput");
-      //AiMod.logGeneralStatus();
-
       base.StartVersus();
     }
-
-    //public bool CurrentPlayerIs(PlayerType type) {
-    //   return AiMod.currentPlayerType[playerIndex] == type;
-    //}
 
     public bool HumanControlExists()
     {

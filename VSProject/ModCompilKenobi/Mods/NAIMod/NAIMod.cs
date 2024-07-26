@@ -66,23 +66,10 @@ namespace NAIMod
         agents[i] = new Agent(i, AgentInputs[i]);
         AiMod.nbPlayerType[i]++;
         Logger.Info("Agent " + i + " Created");
-        //if (null != TFGame.PlayerInputs[i] && NAIModNoKeyboardEnabled && TowerfallKeyboardInputName.Equals(TFGame.PlayerInputs[i].GetType().ToString()))
-        //{
-        //  Logger.Info("NativeAiMod.createAgent i = " + i + " : " + TFGame.PlayerInputs[i].GetType());
-        //  Logger.Info("destroy keyboard input object");
-        //  TFGame.PlayerInputs[i] = null;
-        //}
         if (null != TFGame.PlayerInputs[i]) continue;
 
-        
-        //Logger.Info("NativeAiMod.createAgent i = " + i + " is null or KeyboardInput");
-        // Automatically set an agent for free input slot
-        // add a controller to PlayerInputs
-        //TFGame.PlayerInputs[i] = new Input(i);
-        //agents[i] = new Agent(i, TFGame.PlayerInputs[i]);
         TFGame.PlayerInputs[i] = AgentInputs[i];
         AiMod.currentPlayerType[i] = PlayerType.NAIMod;
-        //Logger.Info("Agent " + i + " set to free slot");
       }
 
       isAgentReady = true;
@@ -111,8 +98,6 @@ namespace NAIMod
         if (!(ModCompilKenobi.ModCompilKenobi.CurrentPlayerIs(PlayerType.NAIMod, i)
             && ModCompilKenobi.ModCompilKenobi.IsAgentPlaying(i, level)))
           continue;
-        //if (level.GetPlayer(i) == null) continue;
-        //if (!NAIMod.InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString())) continue; //todo not necessary anymore
         agents[i].Play();
       }
     }

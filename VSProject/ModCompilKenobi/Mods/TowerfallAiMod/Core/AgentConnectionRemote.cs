@@ -17,6 +17,7 @@ namespace TowerfallAi.Core {
     }
 
     public override async Task<Message> ReceiveAsync(TimeSpan timeout = default, CancellationToken cancellationToken = default) {
+      //Logger.Info("AgentConnectionRemote.ReceiveAsync");
       return JsonConvert.DeserializeObject<Message>(await Connection.ReadAsync(timeout, cancellationToken));
     }
 

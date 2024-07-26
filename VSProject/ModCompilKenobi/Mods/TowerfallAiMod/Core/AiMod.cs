@@ -24,7 +24,6 @@ namespace TowerfallAi.Core {
     public const string ModAiVersion = "v0.1.1"; 
 
     private const string poolName = "default";
-    //public const string BaseDirectory = "aimod";
     private const string defaultConfigName = "config.json";
 
     public static bool AgentConnected = false;
@@ -38,16 +37,6 @@ namespace TowerfallAi.Core {
     // If this is set to false, this mod should do no effect.
     public static bool ModAIEnabled { get; private set;}
     public static bool ModAITraining { get; private set;}
-
-    //TODO :  Mod8PEnabled don't work, the rollcall mainmenu doesn't display the portrait and show more than
-    // 4 archer when Mod8PEnabled = false (but eh game worked fine)
-    // when Mod8PEnabled = 8 there is no problem.
-    // The problem is in Patcher.MyMainMenu which replace 8 to 4. I didn't found a solution,
-    // when I comment the MyMainMenu file in the patcher.cs and overload the Towerfall.Mainmenu in the TowerfallAi.Mod
-    // I have an error in the screen load archer selection : 
-    //   System.Reflection.TargetInvocationException: Une exception a été levée par la cible d'un appel. ---> System.BadImageFormatException: Signature binaire incorrecte. (Exception de HRESULT : 0x80131192)
-    //   à TowerFall.MainMenu.CreateRollcall()
-    // If this is set to false, the mod 8 player is desactived
 
     public static readonly Random Random = new Random((int)DateTime.UtcNow.Ticks);
 
@@ -73,7 +62,6 @@ namespace TowerfallAi.Core {
     private static ResetOperation resetOperation;
     private static CancellationTokenSource ctsSession = new CancellationTokenSource();
 
-    //public static GameTime gameTime;
     public static Stopwatch gameTimeWatch;
     private static TimeSpan totalGameTime = new TimeSpan();
     private static long totalFrame = 0;
@@ -89,34 +77,6 @@ namespace TowerfallAi.Core {
     static bool rematch;
     public static TimeSpan logTimeInterval = new TimeSpan(0, 1, 0);
     
-    //public static void logGeneralStatus() {
-    //    Logger.Info("logGeneralStatus");
-    //  //public static AgentConnection[] agents = new AgentConnection[TFGame.Players.Length];
-
-    //  //public static PlayerInput[] savedHumanPlayerInput = new PlayerInput[TFGame.Players.Length];
-    //  //public static int[] nbPlayerType = new int[TFGame.Players.Length];
-    //  //public static PlayerType[] currentPlayerType = new PlayerType[TFGame.Players.Length];
-    //  //public static bool isHumanPlayerTypeSaved = false;
-    //  for (var i = 0; i < agents.Length; i++)   {
-    //    //Logger.Info("savedHumanPlayerInput["+i+"] == null : " + (savedHumanPlayerInput[i] == null));
-    //    if (null != savedHumanPlayerInput[i])
-    //      Logger.Info("savedHumanPlayerInput["+i+ "].GetType() : " + savedHumanPlayerInput[i].GetType());
-
-    //    Logger.Info("nbPlayerType[" + i+"] : " + nbPlayerType[i]);
-    //    //Logger.Info("currentPlayerType[" + i+"] == null : " + ( null == currentPlayerType[i]));
-    //    if (null != currentPlayerType[i])
-    //      Logger.Info("currentPlayerType[" + i + "] : " + currentPlayerType[i]);
-
-    //    Logger.Info("isHumanPlayerTypeSaved : " + isHumanPlayerTypeSaved);
-
-    //    Logger.Info("TFGame.Players["+i+"] : " + TFGame.Players[i]);
-    //    if (TFGame.PlayerInputs[i] != null)
-    //      Logger.Info("TFGame.PlayerInputs[" + i + "] : " + TFGame.PlayerInputs[i].GetType());
-
-
-    //  }
-    //}
-
     public class ReconfigOperation {
       public MatchConfig Config { get; set; }
       public List<RemoteConnection> Connections { get; set; }
@@ -141,11 +101,6 @@ namespace TowerfallAi.Core {
         }
       }
     }
-
-    //public static int GetPlayerCount()
-    //{
-    //  return TF8PlayerMod.TF8PlayerMod.Mod8PEnabled ? 8 : 4; 
-    //}
 
     public static void LoadConfigFromPath() {
       if (!File.Exists(ConfigPath)) {
@@ -190,60 +145,6 @@ namespace TowerfallAi.Core {
 
       Logger.Info("Post Game Initialize.");
     }
-/*
-    public static void Update(Action<GameTime> originalUpdate) {
-      int fps = 0;
-      if (Config?.fps > 0)
-      {
-        fps = IsMatchRunning() ? Config.fps : 10;
-        fpsWatch.Stop();
-        long ticks = 10000000L / fps;
-        if (fpsWatch.ElapsedTicks < ticks)
-        {
-          Thread.Sleep((int)(ticks - fpsWatch.ElapsedTicks) / 10000);
-        }
-        fpsWatch.Reset();
-        fpsWatch.Restart();
-      }
-
-      if (!ConnectionDispatcher.IsRunning) {
-        throw new Exception("ConnectionDispatcher stopped running");
-      }
-
-      if (!loggedScreenSize) {
-        Logger.Info("Screen: {0} x {1}, {2}".Format(
-          TFGame.Instance.Screen.RenderTarget.Width,
-          TFGame.Instance.Screen.RenderTarget.Height,
-          TFGame.Instance.Screen.RenderTarget.Format));
-        loggedScreenSize = true;
-      }
-
-      try {
-        if (!AgentConnected || PreUpdate())
-        {
-          if (fps > 0)
-          {
-            originalUpdate(GetGameTime());
-          }
-          else
-          {
-            originalUpdate(gameTime);
-          }
-        }
-      } catch (AggregateException aggregateException) {
-        foreach (var innerException in aggregateException.Flatten().InnerExceptions) {
-          HandleFailure(innerException);
-        }
-      } catch (Exception ex) {
-        HandleFailure(ex);
-      }
-            
-      if (gameTimeWatch.ElapsedMilliseconds > logTimeInterval.TotalMilliseconds) {
-        LogGameTime();
-        gameTimeWatch.Restart();
-      }
-    }
-*/
     public static void HandleFailure(Exception ex) {
       if (ex is SocketException) {
         Logger.Info($"Connection error. Session will stop and wait for another config. Exception:\n  {ex}");
@@ -463,8 +364,6 @@ namespace TowerfallAi.Core {
           return GameData.TrialsLevels[1,1].GetLevelSystem();
         }
       }
-      //else if (Config.mode == GameModes.Warlord) //TODO
-      //}
       else //default QuestLevels
       {
           return GameData.QuestLevels[0].GetLevelSystem();
@@ -612,10 +511,6 @@ namespace TowerfallAi.Core {
           {
             throw new ConfigException("No agent in config, starting normal game.");
           }
-          //if (config.fps <= 0)
-          //{
-          //  throw new ConfigException("Fps value invalid");
-          //}
           if (config.level <= 0)
           {
             throw new ConfigException("Invalid level {0}.");
@@ -631,11 +526,6 @@ namespace TowerfallAi.Core {
           //TODO
           //skipWaves
           //solids
-
-          //if (config.fps <= 0)
-          //{
-          //  throw new ConfigException("Fps value invalid");
-          //}
 
           if (config.agentTimeout == null)
           {

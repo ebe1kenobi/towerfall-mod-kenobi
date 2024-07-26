@@ -83,22 +83,7 @@ namespace ModCompilKenobi
         ModCompilKenobi.Update(originalUpdate);
         return;
       }
-      
-/*
-      if (NAIMod.NAIMod.NAIModEnabled)
-      {
-        NAIMod.NAIMod.gameTime = gameTime;
-        NAIMod.NAIMod.Update(originalUpdate);
-        return;
-      }
-
-      if (AiMod.ModAIEnabled)
-      {
-        AiMod.gameTime = gameTime;
-        AiMod.Update(originalUpdate);
-        return;
-      }
-*/
+     
       originalUpdate(gameTime);
 
     }
