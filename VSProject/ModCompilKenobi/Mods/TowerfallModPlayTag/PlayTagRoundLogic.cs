@@ -121,7 +121,7 @@ namespace TowerfallAi.Mod
       Player.ShootLock = true;
       foreach (Player p in this.Session.CurrentLevel.Players) 
       {
-        p.playTagCountDown = p.playTagDelayModePlayTag;
+        p.playTagCountDown = SaveData.Instance.Options.DelayGameTagPlayTagCountDown;
         p.playTagCountDownOn = true;
         p.playTag = false;
         p.creationTime = DateTime.Now;

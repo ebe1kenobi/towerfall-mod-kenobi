@@ -48,6 +48,9 @@ namespace TowerfallAi.Mod {
 
     public override void Update() {
       nbUpdate++;
+      if (((Player)this.Session.CurrentLevel.Players[0]).playTagCountDownOn)
+        TowerfallModPlayTag.TowerfallModPlayTag.Update();
+
       if (AiMod.ModAIEnabled) {
         Agents.RefreshInputFromAgents(this);
       }

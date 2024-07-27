@@ -113,6 +113,11 @@ namespace Patcher {
       MyInputState.PatchModule(module);
       MyModes.PatchModule(module);
       MyVersusModeButton.PatchModule(module);
+      MyOptions.PatchModule(module);
+
+      MySession.PatchModule(module);
+
+
 
       module.Write(unsealedPath);
       Console.WriteLine("Unsealed binary created in {0}", unsealedPath);
@@ -218,7 +223,7 @@ namespace Patcher {
           }
         }
       }
-      
+
       MyMInput.PatchModule(baseModule);
       MyMainMenu.PatchModule(baseModule);
       MyMenuButtons.PatchModule(baseModule);
@@ -226,7 +231,7 @@ namespace Patcher {
       MyPlayerInput.PatchModule(baseModule);
       MyReadyBanner.PatchModule(baseModule);
       MyRoundLogic.PatchModule(baseModule);
-      MySession.PatchModule(baseModule);
+      //MySession.PatchModule(baseModule);
       MyTFCommands.PatchModule(baseModule);
       MyTFGame.PatchModule(baseModule);
       MyTeamSelectOverlay.PatchModule(baseModule);

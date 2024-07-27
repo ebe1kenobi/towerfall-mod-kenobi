@@ -2,8 +2,6 @@
 using Monocle;
 using System;
 using TowerFall;
-using static TowerFall.OrbPickup;
-using ModCompilKenobi;
 using System.Collections.Generic;
 
 namespace TowerfallAi.Mod
@@ -19,6 +17,7 @@ namespace TowerfallAi.Mod
     private Image image;
     private Image border;
     private Pickups playTagType;
+    private Counter pauseCounter;
     public static List<Pickups> realPickupPossibleList = new List<Pickups> { 
                                   Pickups.Arrows,
                                   Pickups.BombArrows,
@@ -312,7 +311,6 @@ namespace TowerfallAi.Mod
       if (player.playTag)
         return;
       startPlayTag(player);
-      Sounds.boss_humanLaugh.Play(player.X);
       this.RemoveSelf();
     }
 
@@ -351,7 +349,8 @@ namespace TowerfallAi.Mod
       }
     }
 
-    public void startPlayTag(Player player) {
+    public void startPlayTag(Player player)
+    {
       if (player.playTag)
         return;
       if (player.playTagCountDownOn)
@@ -359,7 +358,7 @@ namespace TowerfallAi.Mod
         return;
       }
       Player.ShootLock = true;
-      player.playTagCountDown = player.playTagDelay;
+      player.playTagCountDown = SaveData.Instance.Options.DelayPickupPlayTagCountDown;
       player.playTag = true;
       player.creationTime = DateTime.Now;
       player.pauseDuration = 0;
@@ -367,10 +366,14 @@ namespace TowerfallAi.Mod
       for (var i = 0; i < TFGame.Players.Length; i++)
       {
         Player p = player.Level.Session.CurrentLevel.GetPlayer(i);
-        if (p != null) {
+        if (p != null)
+        {
           p.playTagCountDownOn = true;
         }
       }
+      this.Level.Session.NbPlayTagPickupActivated++;
+
+      TowerfallModPlayTag.TowerfallModPlayTag.StartPlayTagEffect(player);
     }
 
     public override void DoPlayerCollect(Player player)

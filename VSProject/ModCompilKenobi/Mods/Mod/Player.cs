@@ -151,9 +151,9 @@ namespace TowerfallAi.Mod
         this.Aiming = false; 
         int delay;
         if (this.Level.Session.MatchSettings.Mode == Modes.PlayTag) {
-          delay = playTagDelayModePlayTag;
+          delay = SaveData.Instance.Options.DelayGameTagPlayTagCountDown;
         } else {
-          delay = playTagDelay;
+          delay = SaveData.Instance.Options.DelayPickupPlayTagCountDown;
         }
         previousPlayTagCountDown = playTagCountDown;
         playTagCountDown = delay - (int)(DateTime.Now - creationTime).TotalSeconds + pauseDuration;
