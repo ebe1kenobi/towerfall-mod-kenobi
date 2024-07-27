@@ -18,8 +18,6 @@ namespace TowerfallAi.Mod
     // Play Tag var
     public bool playTag = false;
     public PlayTagHUD PlayTagHUD;
-    public int playTagDelay = 10; 
-    public int playTagDelayModePlayTag = 15; 
     public int playTagCountDown = 0;
     public int previousPlayTagCountDown = 0;
     public bool playTagCountDownOn = false;
