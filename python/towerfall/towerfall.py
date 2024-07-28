@@ -201,7 +201,7 @@ class Towerfall:
     # logging.info("TowerFall.close_all")
     logging.info('Closing all TowerFall.exe processes...')
     for process in psutil.process_iter(attrs=['pid', 'name']):
-      logging.info(f'Checking process {process.pid} {process.name()}')
+      # logging.info(f'Checking process {process.pid} {process.name()}')
       if process.name() != 'TowerFall.exe':
         continue
       try:
