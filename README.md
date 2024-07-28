@@ -1,4 +1,4 @@
-# Table of Contents  
+![image](https://github.com/user-attachments/assets/989e3963-3f16-453c-a432-27310a5c3d85)# Table of Contents  
 - [Presentation](#presentation)
 - Mods List
   - [TF-8 mod](#tf8mod)  v1.3 
@@ -33,6 +33,42 @@ You can play
 - play a new game mode play tag
 - with a new play tag treasure chest item
 - and 2 variant mod that are not worth presenting, they were juste test
+
+
+## Installing
+
+Only tested on Windows at the moment.
+
+* Purchase the game [TowerFall Ascension](https://store.steampowered.com/app/251470/TowerFall_Ascension/) on steam. (**BUY IT**, best game ever)
+
+* Locate `TowerFall.exe` in the game directory. To find it, go to Steam, right-click the game and navigate to `Properties > Local Files > Browse...`
+
+* Download the mod from the latest [release](../../releases), unzip all its contents in the game directory. Make sure they are in the same directory as `TowerFall.exe`.
+
+* If you do not have the DarkWorld Expansion, delete the DarkWorldContent folder.
+* If you are using the Humble version, replace Content/Atlas/menuAtlas.xml with Content/Atlas/menuAtlas-Humble-Version.xml.
+
+* Make sure the game is not running, then execute `Patcher.exe`. This will overwrite create the file `TowerFall.exe.ModCompilKenobi.exe`.
+* Rename TowerFall.exe to TowerFall.exe.original
+* Rename TowerFall.exe.ModCompilKenobi.exe to TowerFall.exe
+* You will need python to use ai python mod :
+  * download python : https://www.python.org/downloads/
+  * install python and pip
+  * ![image](https://github.com/user-attachments/assets/825099d5-604b-4b84-95e5-5eaf102d3a1b)
+  * ![image](https://github.com/user-attachments/assets/978da61a-7820-463f-9bfa-953d68eb2233)
+  * ![image](https://github.com/user-attachments/assets/a58629d6-9d83-4046-a7a4-75e2a9cfa75d)
+  * then go in the towerfall directory and execute the command pip install to install the requires python lib :
+  * ![image](https://github.com/user-attachments/assets/70bd15ba-beda-4880-979d-e61548165113)
+ 
+
+**To activate some meodule you need to add option parameter to the towerfall.exe** :
+  - [TF-8 mod](#tf8mod) : --8pmod
+  - [AI python mod](#aimod)  : --aimod
+  - [PlayTag mod](#tf8mod) : none
+  - [AI Native mod](#tf8mod) : --nativeaimod (with --nativeaimodnokeyboard if you want to discard the keyboard for an AI)
+  - [Variant speed mod](#tf8mod) : none
+  - [Variant control ghost mod](#tf8mod) : none
+
 
 ## build the mod (for the devs)
 
@@ -100,31 +136,6 @@ In some case (crash of visual studio, or ...) you will need to force update the 
 update-package Microsoft.Bcl.Async -reinstall
 ```
 See the package config file in .\VSProject\ModCompilKenobi\packages.config to see the list of package.
-
-## Installing
-
-Only tested on Windows at the moment.
-
-* Purchase the game [TowerFall Ascension](https://store.steampowered.com/app/251470/TowerFall_Ascension/) on steam. (**BUY IT**, best game ever)
-
-* Locate `TowerFall.exe` in the game directory. To find it, go to Steam, right-click the game and navigate to `Properties > Local Files > Browse...`
-
-* Download the mod from the latest [release](../../releases), unzip all its contents in the game directory. Make sure they are in the same directory as `TowerFall.exe`.
-
-* If you do not have the DarkWorld Expansion, delete the DarkWorldContent folder.
-* If you are using the Humble version, replace Content/Atlas/menuAtlas.xml with Content/Atlas/menuAtlas-Humble-Version.xml.
-
-* Make sure the game is not running, then execute `Patcher.exe`. This will overwrite create the file `TowerFall.exe.ModCompilKenobi.exe`.
-* Rename TowerFall.exe to TowerFall.exe.original
-* Rename TowerFall.exe.ModCompilKenobi.exe to TowerFall.exe
-
-**To activate some meodule you need to add option parameter to the towerfall.exe** :
-  - [TF-8 mod](#tf8mod) : --8pmod
-  - [AI python mod](#aimod)  : --aimod
-  - [PlayTag mod](#tf8mod) : none
-  - [AI Native mod](#tf8mod) : --nativeaimod (with --nativeaimodnokeyboard if you want to discard the keyboard for an AI)
-  - [Variant speed mod](#tf8mod) : none
-  - [Variant control ghost mod](#tf8mod) : none
 
 ### Uninstalling
 To uninstall this mod, right-click on the game and go to `Properties > Local Files > Verify integrity of game files...` This will download the unmodified file from Steam.
