@@ -10,13 +10,14 @@
     public static void ParseArgs(string[] args)
     {
       Mod8PEnabled = true;
-      for (int i = 0; i < args.Length; i++)
-      {
-        if (args[i] == "--no8pmod")
-        {
-          Mod8PEnabled = false;
-        }
-      }
+      // always enable in compil
+      //for (int i = 0; i < args.Length; i++)
+      //{
+      //  if (args[i] == "--no8pmod")
+      //  {
+      //    Mod8PEnabled = false;
+      //  }
+      //}
     }
 
     public static int GetPlayerCount()

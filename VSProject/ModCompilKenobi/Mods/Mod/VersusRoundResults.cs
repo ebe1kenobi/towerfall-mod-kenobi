@@ -10,6 +10,7 @@ namespace ModCompilKenobi
   {
     public MyVersusRoundResults(Session session, List<EventLog> events) : base(session, events)
     {
+            Logger.Info("MyVersusRoundResults");
     }
 
     public override void Render()

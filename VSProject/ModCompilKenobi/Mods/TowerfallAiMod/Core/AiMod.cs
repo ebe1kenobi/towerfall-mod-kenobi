@@ -82,6 +82,8 @@ namespace TowerfallAi.Core {
 
     public static void ParseArgs(string[] args) {
       ModAIEnabled = true;
+      ModAITraining = false;
+ 
       for (int i = 0; i < args.Length; i++)
       {
         if (args[i] == "--noaimod")
@@ -91,8 +93,11 @@ namespace TowerfallAi.Core {
         if (args[i] == "--aimodtraining")
         {
           ModAITraining = true;
-          ModAIEnabled = true;
         }
+      }
+      //force ModAIEnabled if training on
+      if (ModAITraining) {
+        ModAIEnabled = true;
       }
     }
 
@@ -208,6 +213,7 @@ namespace TowerfallAi.Core {
 
     private static void StartNewSession() {
       Logger.Info("Starting a new session.");
+      Logger.Info("Create match settings.");
       CreateMatchSettings();
       Session session = new Session(matchSettings);
       session.QuestTestWave = Config.skipWaves;
@@ -255,7 +261,7 @@ namespace TowerfallAi.Core {
         }
 
         if (resetOperation != null) {
-          Agents.Reset(resetOperation.Entities, ctsSession.Token);
+          Agents.Reset(resetOperation.Entities, ctsSession.Token); 
           resetOperation = null;
         }
       }
@@ -365,7 +371,9 @@ namespace TowerfallAi.Core {
     }
 
     private static void CreateMatchSettings() {
-      if (!IsNoConfig) {
+      Logger.Info("CreateMatchSettings.");
+      if (!IsNoConfig)
+      {
         Config = JsonConvert.DeserializeObject<MatchConfig>(File.ReadAllText(ConfigPath));
       }
       MatchSettings.MatchLengths matchLength;
@@ -474,7 +482,10 @@ namespace TowerfallAi.Core {
           indexRemote++;
         }
 
+        Logger.Info("Set players playing");
+
         TFGame.Players[indexForTeam] = true;
+        TFGame.PlayerInputs[indexForTeam] = AiMod.agents[indexForTeam];
         TFGame.Characters[indexForTeam] = agent.GetArcherIndex();
         TFGame.AltSelect[indexForTeam] = agent.GetArcherType();
 

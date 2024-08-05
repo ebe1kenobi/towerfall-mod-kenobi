@@ -1,6 +1,7 @@
 ﻿using Monocle;
 using TowerFall;
 using System;
+using ModCompilKenobi;
 
 namespace TowerfallModPlayTag
 {

@@ -8,12 +8,12 @@ default_logging()
 def main():
   # Creates or reuse a Towerfall game.
   towerfall = Towerfall(
-    verbose = 1,
+    verbose = 0,
     config = dict(
       mode='sandbox',
       level=2,
       fps=60,
-      agentTimeout='00:00:02',
+      agentTimeout='00:00:30',
       solids=[[0] * 32]*14 + [[1]*32] + [[0] * 32]*9,
       agents=[
         dict(type='remote', archer='white-alt')]

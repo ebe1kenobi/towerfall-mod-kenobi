@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using ModCompilKenobi;
 using Monocle;
 using Patcher;
 using System;
@@ -20,6 +21,7 @@ namespace TowerfallAi.Mod
             //{
             //  return;
             //}
+            Logger.Info("MyVersusMatchResults");
             Vector2[] vectorArray;
             Vector2[] vectorArray2;
             this.session = session;

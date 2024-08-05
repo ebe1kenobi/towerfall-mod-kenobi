@@ -213,7 +213,7 @@ namespace TowerfallAi.Mod
         this.DisableSolids(); 
       }
 
-      bool pass = false; //TODO code smell 
+      bool pass = false; //TODO code smell
       if ((int)this.ghostEndCounter > 0) { 
         this.ghostEndCounter.Update();
         pass = true;

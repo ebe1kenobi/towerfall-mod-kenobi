@@ -40,23 +40,20 @@ namespace ModCompilKenobi
         positionText = new Vector2(Position.X, 10);
       }
 
-      if (ModCompilKenobi.IsThereOtherPlayerType(playerIndex))
-      {
-        upArrow = new Image(TFGame.Atlas["versus/playerIndicator"]);
-        upArrow.FlipY = true;
-        upArrow.Visible = true;
-        upArrow.Color = color;
-        this.Add((Component)upArrow);
-        upArrow.X = -10;
-        upArrow.Y = -70;
+      upArrow = new Image(TFGame.Atlas["versus/playerIndicator"]);
+      upArrow.FlipY = true;
+      upArrow.Visible = true;
+      upArrow.Color = color;
+      this.Add((Component)upArrow);
+      upArrow.X = -10;
+      upArrow.Y = -70;
 
-        downArrow = new Image(TFGame.Atlas["versus/playerIndicator"]);
-        downArrow.Visible = true;
-        this.Add((Component)downArrow);
-        downArrow.X = -10;
-        downArrow.Y = -50;
-        downArrow.Color = color;
-      }
+      downArrow = new Image(TFGame.Atlas["versus/playerIndicator"]);
+      downArrow.Visible = true;
+      this.Add((Component)downArrow);
+      downArrow.X = -10;
+      downArrow.Y = -50;
+      downArrow.Color = color;
 
       String name = "";
       playerName = new Text(TFGame.Font, name, positionText, color, Text.HorizontalAlign.Left, Text.VerticalAlign.Bottom);

@@ -67,16 +67,16 @@ namespace TowerfallAi.Core {
         int numberOfSlotOpen = 0;
 
 
-        if (AiMod.ModAITraining)
-        {
+        //if (AiMod.ModAITraining)
+        //{
           //for training, we count only the human from the config
           numberOfSlotOpen = TFGame.PlayerInputs.Length; //todo getplayer 8 or 4
-        }
-        else
-        {
-          numberOfSlotOpen = TFGame.PlayerInputs.Length; //todo getplayer 8 or 4
-                                                         //for the normal game, we count the number of joystick connected
-      }
+        //}
+      //  else
+      //  {
+      //    numberOfSlotOpen = TFGame.PlayerInputs.Length; //todo getplayer 8 or 4
+      //                                                   //for the normal game, we count the number of joystick connected
+      //}
       
         return numberOfSlotOpen;
     }
@@ -143,7 +143,6 @@ namespace TowerfallAi.Core {
     }
 
     public static void NotifyLevelLoad(Level level) {
-      Logger.Info("Level reloaded");
       scenarioSent = false;
       StateScenario stateScenario = new StateScenario();
 
@@ -160,6 +159,7 @@ namespace TowerfallAi.Core {
       }
 
       scenarioMessage = JsonConvert.SerializeObject(stateScenario);
+
       levelLoaded = true;
     }
 
@@ -312,18 +312,19 @@ namespace TowerfallAi.Core {
       if (!levelLoaded) return;
 
       if (!scenarioSent) {
-        Logger.Info("Level not notified yet");
+
         SendScenario(level);
       }
 
       if (frame == 0) {
+
         RecreateEntities(level);
       }
 
       RefreshStateUpdate(level);
       stateUpdate.dt = Engine.TimeMult;
       stateUpdate.id = frame;
-      
+
       string serializedStateUpdate = JsonConvert.SerializeObject(stateUpdate);
 
       draws.Clear();
@@ -331,6 +332,7 @@ namespace TowerfallAi.Core {
 
       // Start receiving all messages
       for (int i = 0; i< AgentConnections.Count; i++) {
+
         AgentConnection connection = AgentConnections[i];
         if (connection == null) continue;
 

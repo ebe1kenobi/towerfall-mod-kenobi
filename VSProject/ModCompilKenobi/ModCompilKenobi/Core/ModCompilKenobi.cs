@@ -119,7 +119,12 @@ namespace ModCompilKenobi
 
       try
       {
-        if (!AiMod.ModAIEnabled || (!AiMod.AgentConnected || AiMod.PreUpdate()))
+        // We originalUpdate() if no AI or (if ai is enable but agent not yet connected we need to call original update
+        // to display the Loader, else Preupdate will give problem (I forgot which one...)
+        // introduce a problem with sandboxmode whcih wait for a reset call, which we had, but resetOperation will be null and nAgents.restet never called
+        // because of the second preupdate (this one or the one in MainMenu.Update
+        // => Ok corrected with (!AiMod.ModAITraining && !AiMod.AgentConnected)
+        if (!AiMod.ModAIEnabled || ((!AiMod.ModAITraining && !AiMod.AgentConnected) || AiMod.PreUpdate()))
         {
           if (AiMod.ModAIEnabled && fps > 0)
           {

@@ -106,7 +106,8 @@ namespace TowerfallAi.Mod
       List<Vector2> chestPositions,
       List<Vector2> bigChestPositions)
     {
-      List <TreasureChest> chestSpawnsForLevel = base.GetChestSpawnsForLevel(chestPositions, bigChestPositions);
+
+      List<TreasureChest> chestSpawnsForLevel = base.GetChestSpawnsForLevel(chestPositions, bigChestPositions);
 
       if (SaveData.Instance.Options.EnablePlayTagChestTreasure 
           && this.Session.NbPlayTagPickupActivated == 0

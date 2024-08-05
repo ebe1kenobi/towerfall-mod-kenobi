@@ -117,7 +117,8 @@ namespace TowerfallAi.Mod {
     }
 
     public override void QuitAndSave() {
-      if (AiMod.ModAITraining) {
+      if (AiMod.ModAITraining)
+      {
         AiMod.EndSession();
         return;
       }

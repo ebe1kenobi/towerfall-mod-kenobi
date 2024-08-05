@@ -48,16 +48,20 @@ namespace TowerfallAi.Mod {
 
     public override void Update() {
       nbUpdate++;
-      if (((Player)this.Session.CurrentLevel.Players[0]).playTagCountDownOn)
+      if (! (Ending)) {
+        if (this.Session.CurrentLevel.LivingPlayers > 0 && ((Player)this.Session.CurrentLevel.Players[0]).playTagCountDownOn) //todo maybe crash here...
         TowerfallModPlayTag.TowerfallModPlayTag.Update();
 
-      if (AiMod.ModAIEnabled) {
-        Agents.RefreshInputFromAgents(this);
-      }
+        if (AiMod.ModAIEnabled) {
+          Agents.RefreshInputFromAgents(this);
 
-      if (NAIMod.NAIMod.NAIModEnabled)
-      {
-        NAIMod.NAIMod.AgentUpdate(this);
+        }
+
+        if (NAIMod.NAIMod.NAIModEnabled)
+        {
+          NAIMod.NAIMod.AgentUpdate(this);
+        }
+      } else {
       }
 
       originalUpdate();

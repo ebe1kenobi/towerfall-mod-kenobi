@@ -27,10 +27,11 @@ namespace NAIMod
       NAIModNoKeyboardEnabled = true;
       for (int i = 0; i < args.Length; i++)
       {
-        if (args[i] == "--nonativeaimod")
-        {
-          NAIModEnabled = false;
-        }
+        //Always enabled in compil
+        //if (args[i] == "--nonativeaimod")
+        //{
+        //  NAIModEnabled = false;
+        //}
         if (args[i] == "--nonativeaimodkeyboard")
         {
           NAIModNoKeyboardEnabled = false;
