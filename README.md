@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/989e3963-3f16-453c-a432-27310a5c3d85)# Table of Contents  
+# Table of Contents  
 - [Presentation](#presentation)
 - Mods List
   - [TF-8 mod](#tf8mod)  v1.3 
