@@ -24,7 +24,9 @@ This is a Compil of multiple Mods
 - AI Native mod : https://github.com/ebe1kenobi/tf-mod-ai
 - Variant speed mod : https://github.com/ebe1kenobi/tf-mod-variant-speed
 - Variant control ghost mod : https://github.com/ebe1kenobi/tf-mod-variant-control-ghost
-  
+
+
+ 
 **Best thanks to Jonesey13 and vcanaa.**
 
 You can play 
@@ -33,6 +35,19 @@ You can play
 - play a new game mode play tag
 - with a new play tag treasure chest item
 - and 2 variant mod that are not worth presenting, they were juste test
+
+**Modification for the compil :**
+
+- Select Player type (human, NAI AI) in archer select screen:
+- ![image](https://github.com/user-attachments/assets/fd54f8c4-f68c-491d-bec4-a48912f8542a)
+- Mod 8 player always activated (can't be desactivated anymore)
+- Mod AI native always activated (can't be desactivated anymore)
+- Mod AI python activated by default (can be desactivated if you don't want python)
+- AI native and AI python support for playtag mode
+- correction keyboard config for AI
+- AI name display instead of P1..P8
+- PLaytag option in option screen (desactivated or countdown delay):
+- ![image](https://github.com/user-attachments/assets/9032a2d5-f052-4cbf-b827-eeb654539a6a)
 
 
 ## Installing
