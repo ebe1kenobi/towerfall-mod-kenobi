@@ -4,6 +4,7 @@ import os
 import random
 import signal
 import time
+import threading
 from io import TextIOWrapper
 from typing import Any, Callable, Dict, List, Mapping, Optional
 
@@ -49,7 +50,7 @@ class Towerfall:
     self.towerfall_path = towerfall_path
     self.towerfall_path_exe = os.path.join(self.towerfall_path, 'TowerFall.exe')
     self.pool_name = 'default'
-    self.pool_path = os.path.join(self.towerfall_path, 'aimod', 'pools', self.pool_name)
+    self.pool_path = os.path.join(self.towerfall_path, 'modcompilkenobi', 'pools', self.pool_name)
     self.timeout = timeout
     self.verbose = verbose
     tries = 0
@@ -90,7 +91,22 @@ class Towerfall:
         agents.append(SimpleAgentLevel0(connections[i]))
       i += 1
 
-    while True:
+    ##################################################
+    # EAch agent is a thread (game still freeze sometime when playing)
+    ##################################################
+    # threads = []
+    # for agent in agents:
+    #   thread = threading.Thread(target=agent.run)
+    #   threads.append(thread)
+    #   thread.start()
+
+    # for thread in threads:
+    #   thread.join()
+
+    ##################################################
+    # To use training comment the thread above and decomment the code below :
+    ##################################################
+    while True: #TODO : use thread and each agent read from its connection : each agent -> thread
       # Read the state of the game then replies with an action.
       for connection, agent in zip(connections, agents):
         # logging.info('towerfall.run : connection.read_json')
@@ -185,7 +201,7 @@ class Towerfall:
     # logging.info("TowerFall.close_all")
     logging.info('Closing all TowerFall.exe processes...')
     for process in psutil.process_iter(attrs=['pid', 'name']):
-      logging.info(f'Checking process {process.pid} {process.name()}')
+      # logging.info(f'Checking process {process.pid} {process.name()}')
       if process.name() != 'TowerFall.exe':
         continue
       try:

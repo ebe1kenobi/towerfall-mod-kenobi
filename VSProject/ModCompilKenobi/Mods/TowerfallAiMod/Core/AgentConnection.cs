@@ -13,9 +13,9 @@ namespace TowerfallAi.Core {
     InputState prevInputState;
     public InputState InputState;
 
-    public AgentConnection(int index) : base(KeyboardConfigs.Configs[index], index) {
+    public AgentConnection(int index) : base(ModCompilKenobi.KeyboardConfigs.Configs[index], index) {
       this.index = index;
-      this.Config = KeyboardConfigs.Configs[index];
+      this.Config = ModCompilKenobi.KeyboardConfigs.Configs[index];
     }
 
     protected InputState GetCopy(InputState inputState) {

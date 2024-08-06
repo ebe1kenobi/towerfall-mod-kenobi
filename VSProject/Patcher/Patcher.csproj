@@ -59,6 +59,7 @@
     <Compile Include="Core\Patcher.cs" />
     <Compile Include="Mod\Modes.cs" />
     <Compile Include="Mod\Pickups.cs" />
+    <Compile Include="Mod\Options.cs" />
     <Compile Include="Mod\Player.cs" />
     <Compile Include="Mod\PlayerInput.cs" />
     <Compile Include="Core\Program.cs" />

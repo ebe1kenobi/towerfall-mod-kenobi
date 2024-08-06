@@ -18,8 +18,6 @@ namespace TowerfallAi.Mod
     // Play Tag var
     public bool playTag = false;
     public PlayTagHUD PlayTagHUD;
-    public int playTagDelay = 10; 
-    public int playTagDelayModePlayTag = 15; 
     public int playTagCountDown = 0;
     public int previousPlayTagCountDown = 0;
     public bool playTagCountDownOn = false;
@@ -151,9 +149,9 @@ namespace TowerfallAi.Mod
         this.Aiming = false; 
         int delay;
         if (this.Level.Session.MatchSettings.Mode == Modes.PlayTag) {
-          delay = playTagDelayModePlayTag;
+          delay = SaveData.Instance.Options.DelayGameTagPlayTagCountDown;
         } else {
-          delay = playTagDelay;
+          delay = SaveData.Instance.Options.DelayPickupPlayTagCountDown;
         }
         previousPlayTagCountDown = playTagCountDown;
         playTagCountDown = delay - (int)(DateTime.Now - creationTime).TotalSeconds + pauseDuration;
@@ -215,7 +213,7 @@ namespace TowerfallAi.Mod
         this.DisableSolids(); 
       }
 
-      bool pass = false; //TODO code smell 
+      bool pass = false; //TODO code smell
       if ((int)this.ghostEndCounter > 0) { 
         this.ghostEndCounter.Update();
         pass = true;

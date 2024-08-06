@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using ModCompilKenobi;
 using Monocle;
+using Newtonsoft.Json.Linq;
 using Patcher;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,7 @@ namespace TowerfallAi.Mod
     public const float DEFAULT_ARROW_CHANCE = 0.6f;
     public static readonly float[] DefaultTreasureChances = new float[20]; 
     public static readonly int[] FullTreasureMask = new int[20];  
-    public bool IsPlayTagSpawn = false;
+    //public bool IsPlayTagSpawn = false;
     List<Pickups> listPickupArrow = new List<Pickups>();
     List<Pickups> listPickupReplacement = new List<Pickups>();
 
@@ -104,9 +106,12 @@ namespace TowerfallAi.Mod
       List<Vector2> chestPositions,
       List<Vector2> bigChestPositions)
     {
+
       List<TreasureChest> chestSpawnsForLevel = base.GetChestSpawnsForLevel(chestPositions, bigChestPositions);
 
-      if (!IsPlayTagSpawn && chestSpawnsForLevel.Count > 0 && this.Session.MatchSettings.Mode != Modes.PlayTag)
+      if (SaveData.Instance.Options.EnablePlayTagChestTreasure 
+          && this.Session.NbPlayTagPickupActivated == 0
+          && chestSpawnsForLevel.Count > 0 && this.Session.MatchSettings.Mode != Modes.PlayTag)
       {
         Random rnd = new Random();
         int draw = rnd.Next(0, 3);
@@ -117,7 +122,6 @@ namespace TowerfallAi.Mod
             continue;
           }
           chestSpawnsForLevel[i].pickups[0] = getPlayTagPickupFromRealPickup(chestSpawnsForLevel[i].pickups[0]);
-          IsPlayTagSpawn = true;
           break;
         }
       } 

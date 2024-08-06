@@ -46,56 +46,25 @@ namespace TowerfallAi.Mod {
       originalHandlePausing();
     }
 
-    //public override void Begin()
-    //{ 
-    //  Logger.Info("Begin");
-    //  //foreach (Player player in base.Players)
-    //  for (int i = 0; i < TFGame.PlayerInputs.Length; i++)
-    //  {
-    //    Logger.Info("Begin check player " + i);
-    //    Logger.Info("Begin check player " + i);
-    //    if (!"TowerfallNativeAi.Core.NativeAiInput".Equals(TFGame.PlayerInputs[i].GetType().ToString())) continue;
-    //    // PLAYER doesn't exists yet here
-    //    if (null == base.GetPlayer(i)) continue;
-    //    //TODO ? if no is alive
-    //    //TODO mov in method in NativeAiMod
-    //    Logger.Info("SetAgentLevel start thread " + i);
-    //    NativeAiMod.agentsThread[i].Start();
-    //    Logger.Info("SetAgentLevel started and waiting" + i);
-    //  }
-    //}
-
-    public override void End()
-    {
-      // Freed Thread 
-    //  if (NativeAiMod.ModNativeAIEnabled)
-    //    for (int i = 0; i < NativeAiMod.agentsThread.Length; i++)
-    //    {
-    //      if (null != NativeAiMod.agentsThread[i]) continue;
-    //      if (!NativeAiMod.agentsThread[i].IsAlive) continue;
-    //      NativeAiMod.agentsThread[i].Interrupt(); //TODO check catch exception
-    //    }
-    //}
-  }
-
     public override void Update() {
       nbUpdate++;
-      if (AiMod.ModAIEnabled) {
-        Agents.RefreshInputFromAgents(this);
-      }
+      if (! (Ending)) {
+        if (this.Session.CurrentLevel.LivingPlayers > 0 && ((Player)this.Session.CurrentLevel.Players[0]).playTagCountDownOn) //todo maybe crash here...
+        TowerfallModPlayTag.TowerfallModPlayTag.Update();
 
-      if (NAIMod.NAIMod.NAIModEnabled)
-      {
-        //TODO check if pausing call Update : if yes interrupt all agent
+        if (AiMod.ModAIEnabled) {
+          Agents.RefreshInputFromAgents(this);
 
-        //if (0 == nbUpdate % 2) // TODO ?
-        //{
-        NAIMod.NAIMod.AgentUpdate(this);
-        //}
+        }
+
+        if (NAIMod.NAIMod.NAIModEnabled)
+        {
+          NAIMod.NAIMod.AgentUpdate(this);
+        }
+      } else {
       }
 
       originalUpdate();
-
 
       if ((bool)((MyMatchVariants)this.Session.MatchSettings.Variants).SpeedX1_1)
       {

@@ -24,6 +24,7 @@ namespace TowerfallAi.Core {
     static int frame;
     static bool levelLoaded;
     static bool scenarioSent;
+    public const string InputName = "TowerfallAi.Core.AgentConnectionRemote";
 
     public static void Init() { }
 
@@ -66,31 +67,21 @@ namespace TowerfallAi.Core {
         int numberOfSlotOpen = 0;
 
 
-        if (AiMod.ModAITraining)
-        {
+        //if (AiMod.ModAITraining)
+        //{
           //for training, we count only the human from the config
-          numberOfSlotOpen = TFGame.PlayerInputs.Length - nbHuman;
-        }
-        else
-        {
-          //for the normal game, we count the number of joystick connected
-          for (int i = 0; i < TFGame.PlayerInputs.Length; i++)
-          {
-            // In training mode, don't count the joystick connected, all slot are open
-            // don't count the keyboard
-            if (TFGame.PlayerInputs[i] is null || TFGame.PlayerInputs[i] is KeyboardInput)
-            {
-              numberOfSlotOpen++;
-              continue;
-            }
-          }
-      }
+          numberOfSlotOpen = TFGame.PlayerInputs.Length; //todo getplayer 8 or 4
+        //}
+      //  else
+      //  {
+      //    numberOfSlotOpen = TFGame.PlayerInputs.Length; //todo getplayer 8 or 4
+      //                                                   //for the normal game, we count the number of joystick connected
+      //}
       
         return numberOfSlotOpen;
     }
         
     public static int PrepareAgentConnections(List<AgentConfig> agentConfigs) {
-      Logger.Info("PrepareAgentConnections");
       DisconnectAllAgents();
       int indexAgent;
       int nbHuman = CountHumanConnections(agentConfigs);
@@ -101,10 +92,6 @@ namespace TowerfallAi.Core {
       } else {
         indexAgent = TFGame.PlayerInputs.Length - nbSlotOpen;
       }
-      Logger.Info("indexAgent = " + indexAgent);
-      Logger.Info("nbHuman = " + nbHuman);
-      Logger.Info("nbSlotOpen = " + nbSlotOpen);
-
       int maxPlayer = 4;
       if (TF8PlayerMod.TF8PlayerMod.Mod8PEnabled)
       {
@@ -114,9 +101,6 @@ namespace TowerfallAi.Core {
 
       for (int i = 0; i < agentConfigs.Count && i < TFGame.PlayerInputs.Length; i++) {
         AgentConfig agentConfig = agentConfigs[i];
-        Logger.Info("i = " + i);
-        Logger.Info("indexAgent = " + indexAgent);
-        Logger.Info("agentConfig = " + agentConfig);
 
         if (agentConfig.type == AgentConfig.Type.Human) {
           Logger.Info("Agent {0} is human".Format(i));
@@ -134,7 +118,12 @@ namespace TowerfallAi.Core {
         }
 
         AgentConnections.Add(agentConnection);
-        TFGame.PlayerInputs[indexAgent] = agentConnection;
+        ModCompilKenobi.ModCompilKenobi.nbPlayerType[indexAgent]++;
+        AiMod.agents[indexAgent] = agentConnection;
+        if (ModCompilKenobi.ModCompilKenobi.currentPlayerType[indexAgent] == PlayerType.NAIMod)
+        {
+          ModCompilKenobi.ModCompilKenobi.currentPlayerType[indexAgent] = PlayerType.AiMod;
+        }
         indexAgent++;
       }
 
@@ -142,8 +131,6 @@ namespace TowerfallAi.Core {
     }
 
     public static void AssignRemoteConnections(List<RemoteConnection> connections, CancellationToken cancelAgentCommunication) {
-      Logger.Info("AssignRemoteConnections");
-
       if (connections.Count != remoteConnections.Count) {
         throw new Exception($"Expected {remoteConnections.Count} connections. Got {connections.Count}");
       }
@@ -156,19 +143,12 @@ namespace TowerfallAi.Core {
     }
 
     public static void NotifyLevelLoad(Level level) {
-      Logger.Info("Level reloaded");
       scenarioSent = false;
       StateScenario stateScenario = new StateScenario();
 
       int xSize = level.Tiles.Grid.CellsX;
       int ySize = level.Tiles.Grid.CellsY;
 
-      //public static MatchSettings VersusMatchSettings;
-      //public static MatchSettings TrialsMatchSettings;
-      //public static MatchSettings QuestMatchSettings;
-      //public static MatchSettings DarkWorldMatchSettings;
-      //public static MatchSettings CurrentMatchSettings;
-    
       stateScenario.mode = AiMod.ModAITraining ? AiMod.Config.mode : MainMenu.CurrentMatchSettings.Mode.ToString();
       stateScenario.grid = new int[xSize, ySize];
 
@@ -179,10 +159,11 @@ namespace TowerfallAi.Core {
       }
 
       scenarioMessage = JsonConvert.SerializeObject(stateScenario);
+
       levelLoaded = true;
     }
 
-    static void SendScenario() {
+    static void SendScenario(Level level) {
       Logger.Info("Send scenario to agents.");
 
       List<Task> tasks = new List<Task>();
@@ -191,13 +172,23 @@ namespace TowerfallAi.Core {
       for (int i = 0; i < AgentConnections.Count; i++) {
         var connection = AgentConnections[i];
         if (connection == null) continue;
-        string initMessage = JsonConvert.SerializeObject(new StateInit { index = connection.index });
-        Logger.Info("Sending stateInit to agent {0}.".Format(connection.index));
-        connection.Send(initMessage, frame);
-
-        var task = TaskEx.Run(async () => {
+        if (!InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString()))
+        {
+          string notPlayingMessage = JsonConvert.SerializeObject(new StateNotPlaying { index = connection.index });
+          Logger.Info("Sending StateNotPlaying to agent {0}.".Format(connection.index));
+          connection.Send(notPlayingMessage, frame);
+        }
+        else
+        {
+          string initMessage = JsonConvert.SerializeObject(new StateInit { index = connection.index });
+          Logger.Info("Sending stateInit to agent {0}.".Format(connection.index));
+          connection.Send(initMessage, frame);
+        }
+        var task = TaskEx.Run(async () =>
+        {
           Message reply = await connection.ReceiveAsync(AiMod.Config.agentTimeout, cancelAgentCommunication);
-          if (!reply.success) {
+          if (!reply.success)
+          {
             throw new Exception("Agent didn't ack state init: {0}".Format(reply.message));
           }
         });
@@ -210,9 +201,17 @@ namespace TowerfallAi.Core {
       for (int i = 0; i < AgentConnections.Count; i++) {
         var connection = AgentConnections[i];
         if (connection == null) continue;
-        Logger.Info("Notify level load to agent {0}.".Format(connection.index));
-        connection.Send(scenarioMessage, frame);
-
+        if (!InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString()))
+        {
+          string notPlayingMessage = JsonConvert.SerializeObject(new StateNotPlaying { index = connection.index });
+          Logger.Info("Sending StateNotPlaying to agent {0}.".Format(connection.index));
+          connection.Send(notPlayingMessage, frame);
+        }
+        else
+        {
+          Logger.Info("Notify level load to agent {0}.".Format(connection.index));
+          connection.Send(scenarioMessage, frame);
+        }
         var task = TaskEx.Run(async () => {
           Message reply = await connection.ReceiveAsync(AiMod.Config.agentTimeout, cancelAgentCommunication);
           if (!reply.success) {
@@ -313,29 +312,39 @@ namespace TowerfallAi.Core {
       if (!levelLoaded) return;
 
       if (!scenarioSent) {
-        Logger.Info("Level not notified yet");
-        SendScenario();
+
+        SendScenario(level);
       }
 
       if (frame == 0) {
+
         RecreateEntities(level);
       }
 
       RefreshStateUpdate(level);
       stateUpdate.dt = Engine.TimeMult;
       stateUpdate.id = frame;
-      
+
       string serializedStateUpdate = JsonConvert.SerializeObject(stateUpdate);
 
       draws.Clear();
       List<Task> tasks = new List<Task>();
 
-    // Start receiving all messages
-    for (int i = 0; i< AgentConnections.Count; i++) {
+      // Start receiving all messages
+      for (int i = 0; i< AgentConnections.Count; i++) {
+
         AgentConnection connection = AgentConnections[i];
         if (connection == null) continue;
 
-        connection.Send(serializedStateUpdate, frame);
+        if (!InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString()))
+        {
+          string notPlayingMessage = JsonConvert.SerializeObject(new StateNotPlaying { index = connection.index, id = stateUpdate.id });
+          connection.Send(notPlayingMessage, frame);
+        }
+        else
+        {
+          connection.Send(serializedStateUpdate, frame);
+        }
         var task = TaskEx.Run(async () => {
           Data.Message message = await connection.ReceiveAsync(AiMod.Config.agentTimeout, cancelAgentCommunication);
           if (message.id != stateUpdate.id) {
@@ -350,9 +359,7 @@ namespace TowerfallAi.Core {
         });
         tasks.Add(task);
       }
-
       WaitAllAndClear(tasks);
-      
       frame++;
     }
 

@@ -9,6 +9,8 @@ namespace TowerfallAi.Mod {
   public class ModSession : Session {
     Action originalOnLevelLoadFinish;
 
+    public int NbPlayTagPickupActivated { get; set; }
+
     //Copy parent...
     public bool IsInOvertime
     {
@@ -28,6 +30,12 @@ namespace TowerfallAi.Mod {
 
     public ModSession(MatchSettings matchSettings) : base(matchSettings) { 
       originalOnLevelLoadFinish = Util.GetAction("$original_OnLevelLoadFinish", typeof(Session), this);
+    }
+
+    public override void StartGame()
+    {
+      NbPlayTagPickupActivated = 0;
+      base.StartGame();
     }
 
     public override void LevelLoadStart(Level level)

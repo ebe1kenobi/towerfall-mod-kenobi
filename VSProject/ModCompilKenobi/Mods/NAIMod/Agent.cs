@@ -16,8 +16,9 @@ namespace NAIMod
     private Random random;
     private List<InputState> shoot = new List<InputState>();
 
-    public Agent(int index, PlayerInput input) {
-      this.index = index; 
+    public Agent(int index, PlayerInput input)
+    {
+      this.index = index;
       this.input = (Input)input;
       random = new Random(index * 666);
     }
@@ -29,8 +30,9 @@ namespace NAIMod
     }
 
     public void Play()
-    { 
+    {
       nbFrame++;
+      //play only each N frame
       if (nbFrame % (index + 1) != 0)
       //if (nbFrame % (index + 1 * 3) != 0)
       {
@@ -81,6 +83,11 @@ namespace NAIMod
         foreach (Player player in level.Players)
         {
           if (player.PlayerIndex == index) continue;
+          if (agent.playTagCountDownOn && player.playTag)
+          {
+            enemy = player;
+            break;
+          }
           if (agent.TeamColor == Allegiance.Neutral || player.TeamColor != agent.TeamColor)
           {
             // TODO each agent tak ethe same enemy if they all start from the beginning
@@ -144,7 +151,44 @@ namespace NAIMod
       //    self.press('l')
       /////////////////////////////////////////////
 
-      if (shoot.Count == 0 && 
+      //Game mode playtag
+      if (agent.playTagCountDownOn)
+      {
+        if (agent.playTag)
+        {
+          // pursue
+          if (enemyPosition.X > agentPosition.X)
+          {
+            //right
+            this.input.inputState.MoveX += 1;
+            this.input.inputState.AimAxis.X += 1;
+          }
+          else
+          {
+            //left
+            this.input.inputState.AimAxis.X -= 1;
+            this.input.inputState.MoveX -= 1;
+          }
+        }
+        else
+        {
+          // run away
+          if (enemyPosition.X > agentPosition.X)
+          {
+            //right
+            this.input.inputState.MoveX -= 1;
+            this.input.inputState.AimAxis.X += 1;
+          }
+          else
+          {
+            //left
+            this.input.inputState.AimAxis.X += 1;
+            this.input.inputState.MoveX += 1;
+          }
+        }
+      }
+      //Game Mode versus
+      else if (shoot.Count == 0 &&
           enemyPosition.Y >= agentPosition.Y && enemyPosition.Y - agentPosition.Y < 50
         && (enemyPosition.X > agentPosition.X && enemyPosition.X - agentPosition.X < 100)
            || (enemyPosition.X < agentPosition.X && agentPosition.X - enemyPosition.X < 100))
@@ -185,7 +229,7 @@ namespace NAIMod
       //    if random.randint(0, 1) == 0:
       //      self.press('s')
       /////////////////////////////////////////////
-      if (agent.Arrows.Count > 0)
+      if (!agent.playTagCountDownOn && agent.Arrows.Count > 0)
       {
         if (shoot.Count > 0)
         {
@@ -231,7 +275,9 @@ namespace NAIMod
             Moves.Shoot(ref this.input.inputState, shoot, directionShoot);
           }
         }
-      } else {
+      }
+      else
+      {
         shoot.Clear();
       }
 

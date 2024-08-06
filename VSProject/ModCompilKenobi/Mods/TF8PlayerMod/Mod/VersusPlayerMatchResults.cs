@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using ModCompilKenobi;
 using Monocle;
 using Patcher;
 using System;
@@ -16,6 +17,7 @@ namespace TowerfallAi.Mod
     {
         public MyVersusPlayerMatchResults(Session session, VersusMatchResults matchResults, int playerIndex, Vector2 tweenFrom, Vector2 tweenTo, List<AwardInfo> awards) : base(session, matchResults, playerIndex, tweenFrom, tweenTo, awards)
         {
+            Logger.Info("MyVersusPlayerMatchResults");
             //if (!TF8PlayerMod.TF8PlayerMod.Mod8PEnabled)
             //{
             //  return;

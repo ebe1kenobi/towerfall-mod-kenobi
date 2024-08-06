@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using TowerFall;
 
-namespace NAIMod {
+namespace ModCompilKenobi
+{
   public static class KeyboardConfigs {
 
     public static KeyboardConfig[] Configs = new KeyboardConfig[8]; 
@@ -26,76 +27,76 @@ namespace NAIMod {
       }
 
       int j = 0;
-      Configs[j].Down = new Keys[] { Keys.A };
-      Configs[j].Up = new Keys[] { Keys.Z };
-      Configs[j].Left = new Keys[] { Keys.E };
-      Configs[j].Right = new Keys[] { Keys.R };
+      Configs[j].Down = new Keys[] { Keys.Q };
+      Configs[j].Up = new Keys[] { Keys.A };
+      Configs[j].Left = new Keys[] { Keys.O };
+      Configs[j].Right = new Keys[] { Keys.L };
       Configs[j].Jump = new Keys[] { Keys.NumPad1 }; 
       Configs[j].Shoot = new Keys[] { Keys.F1 };
-      Configs[j].Dodge = new Keys[] { Keys.T };
+      Configs[j].Dodge = new Keys[] { Keys.F13 };
 
       j++;
-      Configs[j].Down = new Keys[] { Keys.Q };
-      Configs[j].Up = new Keys[] { Keys.S };
-      Configs[j].Left = new Keys[] { Keys.D };
-      Configs[j].Right = new Keys[] { Keys.F };
+      Configs[j].Down = new Keys[] { Keys.S };
+      Configs[j].Up = new Keys[] { Keys.Z };
+      Configs[j].Left = new Keys[] { Keys.P };
+      Configs[j].Right = new Keys[] { Keys.M };
       Configs[j].Jump = new Keys[] { Keys.NumPad2 };
       Configs[j].Shoot = new Keys[] { Keys.F2 }; 
-      Configs[j].Dodge = new Keys[] { Keys.G };
+      Configs[j].Dodge = new Keys[] { Keys.F14 };
 
       j++;
-      Configs[j].Down = new Keys[] { Keys.W };
-      Configs[j].Up = new Keys[] { Keys.X };
-      Configs[j].Left = new Keys[] { Keys.C };
-      Configs[j].Right = new Keys[] { Keys.V };
+      Configs[j].Down = new Keys[] { Keys.D };
+      Configs[j].Up = new Keys[] { Keys.E };
+      Configs[j].Left = new Keys[] { Keys.W };
+      Configs[j].Right = new Keys[] { Keys.X };
       Configs[j].Jump = new Keys[] { Keys.NumPad3 };
       Configs[j].Shoot = new Keys[] { Keys.F3 };
-      Configs[j].Dodge = new Keys[] { Keys.B };
+      Configs[j].Dodge = new Keys[] { Keys.F15 };
 
       j++;
-      Configs[j].Down = new Keys[] { Keys.Y };
-      Configs[j].Up = new Keys[] { Keys.U };
-      Configs[j].Left = new Keys[] { Keys.I };
-      Configs[j].Right = new Keys[] { Keys.O };
+      Configs[j].Down = new Keys[] { Keys.F };
+      Configs[j].Up = new Keys[] { Keys.R };
+      Configs[j].Left = new Keys[] { Keys.C };
+      Configs[j].Right = new Keys[] { Keys.V };
       Configs[j].Jump = new Keys[] { Keys.NumPad4 };
       Configs[j].Shoot = new Keys[] { Keys.F4 };
-      Configs[j].Dodge = new Keys[] { Keys.P };
+      Configs[j].Dodge = new Keys[] { Keys.F16 };
+
+      j++;
+      Configs[j].Down = new Keys[] { Keys.G };
+      Configs[j].Up = new Keys[] { Keys.T };
+      Configs[j].Left = new Keys[] { Keys.B };
+      Configs[j].Right = new Keys[] { Keys.N };
+      Configs[j].Jump = new Keys[] { Keys.NumPad5 }; 
+      Configs[j].Shoot = new Keys[] { Keys.F5 };
+      Configs[j].Dodge = new Keys[] { Keys.F17 };
 
       j++;
       Configs[j].Down = new Keys[] { Keys.H };
-      Configs[j].Up = new Keys[] { Keys.J };
-      Configs[j].Left = new Keys[] { Keys.K };
-      Configs[j].Right = new Keys[] { Keys.L };
-      Configs[j].Jump = new Keys[] { Keys.NumPad5 }; 
-      Configs[j].Shoot = new Keys[] { Keys.F5 };
-      Configs[j].Dodge = new Keys[] { Keys.M };
-
-      j++;
-      Configs[j].Down = new Keys[] { Keys.F9 };
-      Configs[j].Up = new Keys[] { Keys.F10 };
-      Configs[j].Left = new Keys[] { Keys.F11 };
-      Configs[j].Right = new Keys[] { Keys.F12 };
+      Configs[j].Up = new Keys[] { Keys.Y };
+      Configs[j].Left = new Keys[] { Keys.F9 };
+      Configs[j].Right = new Keys[] { Keys.F10 };
       Configs[j].Jump = new Keys[] { Keys.NumPad6 };
       Configs[j].Shoot = new Keys[] { Keys.F6 };
-      Configs[j].Dodge = new Keys[] { Keys.N };
+      Configs[j].Dodge = new Keys[] { Keys.F18 };
 
       j++;
-      Configs[j].Down = new Keys[] { Keys.Down };
-      Configs[j].Up = new Keys[] { Keys.Up };
-      Configs[j].Left = new Keys[] { Keys.Left };
-      Configs[j].Right = new Keys[] { Keys.Right };
+      Configs[j].Down = new Keys[] { Keys.J };
+      Configs[j].Up = new Keys[] { Keys.U};
+      Configs[j].Left = new Keys[] { Keys.F11};
+      Configs[j].Right = new Keys[] { Keys.F12};
       Configs[j].Jump = new Keys[] { Keys.NumPad7 };
       Configs[j].Shoot = new Keys[] { Keys.F7 };
-      Configs[j].Dodge = new Keys[] { Keys.LeftControl };
+      Configs[j].Dodge = new Keys[] { Keys.F19 };
 
       j++;
-      Configs[j].Down = new Keys[] { Keys.RightShift };
-      Configs[j].Up = new Keys[] { Keys.RightAlt };
-      Configs[j].Left = new Keys[] { Keys.RightControl };
-      Configs[j].Right = new Keys[] { Keys.Enter };
+      Configs[j].Down = new Keys[] { Keys.K };
+      Configs[j].Up = new Keys[] { Keys.I };
+      Configs[j].Left = new Keys[] { Keys.PageUp };
+      Configs[j].Right = new Keys[] { Keys.PageDown };
       Configs[j].Jump = new Keys[] { Keys.NumPad8 };
       Configs[j].Shoot = new Keys[] { Keys.F8 };
-      Configs[j].Dodge = new Keys[] { Keys.LeftWindows };
+      Configs[j].Dodge = new Keys[] { Keys.F20 };
     }
   }
 }

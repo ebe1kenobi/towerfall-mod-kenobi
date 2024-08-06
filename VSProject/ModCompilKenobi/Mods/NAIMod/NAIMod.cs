@@ -3,6 +3,7 @@ using System;
 using TowerFall;
 using ModCompilKenobi;
 using TowerfallAi.Core;
+using System.Collections.ObjectModel;
 
 namespace NAIMod
 {
@@ -13,27 +14,29 @@ namespace NAIMod
     public const string InputName = "NAIMod.Input";
     public const string TowerfallKeyboardInputName = "TowerFall.KeyboardInput";
     public static GameTime gameTime;
-    private static bool isAgentReady = false;
+    public static bool isAgentReady = false;
     private static Agent[] agents = new Agent[TFGame.Players.Length];
-    
+    public static PlayerInput[] AgentInputs = new PlayerInput[TFGame.Players.Length];
 
     public static bool NAIModEnabled { get; private set;}
     public static bool NAIModNoKeyboardEnabled { get; private set;}
     
     public static void ParseArgs(string[] args)
     {
+      NAIModEnabled = true; 
+      NAIModNoKeyboardEnabled = true;
       for (int i = 0; i < args.Length; i++)
       {
-        if (args[i] == "--nativeaimod")
+        //Always enabled in compil
+        //if (args[i] == "--nonativeaimod")
+        //{
+        //  NAIModEnabled = false;
+        //}
+        if (args[i] == "--nonativeaimodkeyboard")
         {
-          NAIModEnabled = true;
-        }
-        if (args[i] == "--nativeaimodnokeyboard")
-        {
-          NAIModNoKeyboardEnabled = true;
+          NAIModNoKeyboardEnabled = false;
         }
       }
-      
     }
 
     public static void Update(Action<GameTime> originalUpdate)
@@ -56,26 +59,18 @@ namespace NAIMod
 
     public static void CreateAgent()
     {
-      Logger.Info("NativeAiMod.CreateAgent");
-      Logger.Info("NativeAiMod.TFGame.Players.Length = " + TFGame.Players.Length);
-      Logger.Info("NativeAiMod.agents.Length = " + agents.Length);
       //detect first player slot free
-      for (int i = 0; i < TF8PlayerMod.TF8PlayerMod.GetPlayerCount(); i++)
+      for (int i = 0; i < TF8PlayerMod.TF8PlayerMod.GetPlayerCount(); i++) //todo use everywhere
       {
-        Logger.Info("NativeAiMod.createAgent i = " + i);
-        if (null != TFGame.PlayerInputs[i] && NAIModNoKeyboardEnabled && TowerfallKeyboardInputName.Equals(TFGame.PlayerInputs[i].GetType().ToString()))
-        {
-          Logger.Info("NativeAiMod.createAgent i = " + i + " : " + TFGame.PlayerInputs[i].GetType());
-          Logger.Info("destroy keyboard input object");
-          TFGame.PlayerInputs[i] = null;
-        }
+        // create an agent for each player
+        AgentInputs[i] = new Input(i);
+        agents[i] = new Agent(i, AgentInputs[i]);
+        ModCompilKenobi.ModCompilKenobi.nbPlayerType[i]++;
+        Logger.Info("Agent " + i + " Created");
         if (null != TFGame.PlayerInputs[i]) continue;
 
-        Logger.Info("NativeAiMod.createAgent i = " + i + " is null or KeyboardInput");
-        // add a controller to PlayerInputs
-        TFGame.PlayerInputs[i] = new Input(i);
-        agents[i] = new Agent(i, TFGame.PlayerInputs[i]);
-        Logger.Info("Agent " + i + " Created");
+        TFGame.PlayerInputs[i] = AgentInputs[i];
+        ModCompilKenobi.ModCompilKenobi.currentPlayerType[i] = PlayerType.NAIMod;
       }
 
       isAgentReady = true;
@@ -86,6 +81,7 @@ namespace NAIMod
       for (var i = 0; i < TFGame.Players.Length; i++)
       {
         if (!TFGame.Players[i]) continue;
+        if (null == TFGame.PlayerInputs[i]) continue;
         if (! InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString())) continue;
         //set level reference once, at Level creation
         agents[i].SetLevel(level);
@@ -97,8 +93,9 @@ namespace NAIMod
 
       for (int i = 0; i < TFGame.PlayerInputs.Length; i++)
       {
-        if (level.GetPlayer(i) == null) continue;
-        if (!NAIMod.InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString())) continue;
+        if (!(ModCompilKenobi.ModCompilKenobi.CurrentPlayerIs(PlayerType.NAIMod, i)
+            && ModCompilKenobi.ModCompilKenobi.IsAgentPlaying(i, level)))
+          continue;
         agents[i].Play();
       }
     }

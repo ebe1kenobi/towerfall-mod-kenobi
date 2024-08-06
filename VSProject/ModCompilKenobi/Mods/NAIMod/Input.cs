@@ -1,4 +1,5 @@
 ﻿using TowerFall;
+using ModCompilKenobi;
 
 namespace NAIMod
 {
@@ -9,7 +10,7 @@ namespace NAIMod
 
     public Input(int index) : base()
     {
-      this.Config = KeyboardConfigs.Configs[index];
+      this.Config = ModCompilKenobi.KeyboardConfigs.Configs[index];
       InitIcons();
     }
 

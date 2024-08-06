@@ -23,11 +23,24 @@ class Agent:
     self.players = []
     # self.attack_achers = attack_archers
 
+  def run(self):
+    while True:
+      game_state = self.connection.read_json()
+      # logging.info('towerfall.run : agent.act')
+      self.act(game_state)    
+
   def act(self, game_state: Mapping[str, Any]):
     '''
     Handles a game message.
     '''
     # logging.info('agent.act')
+
+    if game_state['type'] == 'notplaying':
+      # logging.info('game_state.type = ' + str(game_state['type']))
+      # 'notplaying' is sent every time a match series starts for an agents not selected to play
+      # Acknowledge the init message.
+      self.connection.send_json(dict(type='result', success=True, id = game_state['id']))
+      return True    
 
     # There are three main types to handle, 'init', 'scenario' and 'update'.
     # Check 'type' to handle each accordingly.
