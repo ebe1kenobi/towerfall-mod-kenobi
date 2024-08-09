@@ -237,13 +237,13 @@ On the Archer select screen, the AI agent use a keyboard config each, Select the
   
 |Action | P1 | P2 | P3 | P4 | P5 | P6 | P7 | P8 |
 | ----- | -- | -- | -- | -- | -- | -- | -- | -- |
-|Down   | A  | Q  | W  | Y  | H  | F9  | Down  | RightShift  |
-|Up     | Z  | S  | X  | U  | J  | F10  | Up  | RightAlt  |
-|Left   | E  | D  | C  | I  | K  | F11  | Left  | RightControl  |
-|Right  | R  | F  | V  | O  | L  | F12  | Right  | Enter  |
+|Down   | A  | Z  | D  | F  | G  | H  | J  | K  |
+|Up     | Q  | S  | E  | R  | T  | Y  | U  | I  |
+|Left   | O  | P  | W  | C  | B  | F9  | F11  | PageUp  |
+|Right  | L  | M  | X  | V  | N  | F10  | F12  | PageDOwn  |
 |Jump / select AI  | NumPad1 | NumPad2 | NumPad3 | NumPad4 | NumPad5 | NumPad6 | NumPad7 | NumPad8 |
 |Shoot / deselect AI | F1 | F2 | F3 | F4 | F4 | F5 | F6 | F7 | F8 |
-|Dodge  | T  | G  | B  | P  | M  | N  | LeftAlt  | LeftWindows  |
+|Dodge  | F13  | F14  | F15  | F16  | F17  | F18  | F19  | F20  |
 
 ## Testing AI mod for training 
 
