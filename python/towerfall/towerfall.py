@@ -66,7 +66,7 @@ class Towerfall:
         if tries > 3:
           raise TowerfallError('Could not config a Towerfall process.')
         tries += 1
-      
+
 
   def run(self):
     # logging.info('Towerfall.logging')
@@ -110,9 +110,14 @@ class Towerfall:
       # Read the state of the game then replies with an action.
       for connection, agent in zip(connections, agents):
         # logging.info('towerfall.run : connection.read_json')
+        # can't do that, because when match settings change and archer selection change, the agent not playing previously will never play and the game will freeze
+        # if agent.not_playing:
+        #   logging.info('towerfall.run : not playing continue')
+        #   continue
+
         game_state = connection.read_json()
         # logging.info('towerfall.run : agent.act')
-        agent.act(game_state)    
+        agent.act(game_state)
 
   def join(self, timeout: float = 2, verbose: int = 0) -> Connection:
     '''
@@ -164,7 +169,7 @@ class Towerfall:
       config = self.config
 
     # logging.info('TowerFall.send_config')
-  
+
     response = self.send_request_json(dict(type='config', config=config))
     # logging.info('response = '+ str(response))
     if response['type'] != 'result':

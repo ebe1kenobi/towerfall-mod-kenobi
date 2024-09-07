@@ -21,12 +21,135 @@ namespace TowerfallAi.Core {
     static List<AgentConnectionRemote> remoteConnections = new List<AgentConnectionRemote>();
     static StateUpdate stateUpdate = new StateUpdate();
     static List<DrawInstruction> draws = new List<DrawInstruction>();
+    static List<int> listPlayerIndexPlaying = new List<int>();
     static int frame;
     static bool levelLoaded;
     static bool scenarioSent;
+
+    static List<String> listEntityToAdd = new List<string>
+    {
+      "TowerFall.Player",
+      //"TowerFall.TreasureChest",
+      //"TowerFall.LevelTiles",
+      //"TowerFall.ShieldPickup",
+      //"TowerFall.ArrowTypePickup",
+      //TowerFall.SensorBlock
+      //TowerFall.BrambleArrow
+      //TowerFall.Brambles
+      //TowerFall.WingsPickup
+      //TowerfallAi.Mod.PlayTag
+    };
+
+    static List<String> listEntityToIgnore = new List<string> {
+      //"TowerFall.DefaultArrow",
+      //"TowerFall.DefaultHat",
+      //"TowerFall.Crown",
+      //"TowerFall.PlayerCorpse",
+      //"TowerFall.LightFade",
+      //"TowerFall.LevelEntity",
+      //"TowerFall.TreasureChest",
+      //"TowerFall.DeathSkull",
+      //"Monocle.ParticleSystem",
+      //"TowerFall.LevelTiles",
+      //"TowerFall.RainDrops",
+      //"TowerFall.ShieldPickup",
+      //"TowerFall.ArrowTypePickup",
+      //"TowerFall.CatchShine",
+      //"TowerFall.WaterDrop",
+
+      //to inspect
+      //TowerFall.Mud
+      //TowerFall.SensorBlock
+      //TowerFall.BrambleArrow
+      //TowerFall.FloatText
+      //TowerFall.Brambles
+      //TowerFall.WingsPickup
+      //TowerfallAi.Mod.PlayTag
+
+      //from doc
+      //amaranthBoss
+      //amaranthShot
+      //arrow
+      //bat
+      //batBomb
+      //batSuperBomb
+      //bird
+      //birdman
+      //brambles
+      //cataclysmBlade
+      //cataclysmBlock
+      //cataclysmBullet
+      //cataclysmEye
+      //cataclysmMissile
+      //cataclysmShieldOrb
+      //chain
+      //chest
+      //crackedPlatform
+      //crackedWall
+      //crown
+      //crumbleBlock
+      //crumbleWall
+      //cultist
+      //cyclopsEye
+      //cyclopsFist
+      //cyclopsPlatform
+      //cyclopsShot
+      //dreadEye
+      //dreadFlower
+      //dreadTentacle
+      //dummy
+      //enemyAttack
+      //evilCrystal
+      //exploder
+      //explosion
+      //fakeWall
+      //flamingSkull
+      //floorMiasma
+      //ghost
+      //ghostPlatform
+      //graniteBlock
+      //hat
+      //hotCoals
+      //ice
+      //icicle
+      //jumpPad
+      //kingReaper
+      //kingReaperBeam
+      //kingReaperBomb
+      //kingReaperCrystal
+      //lantern
+      //laserArrow
+      //lava
+      //loopPlatform
+      //miasma
+      //mirrorPickup
+      //mole
+      //moonGlassBlock
+      //movingPlatform
+      //mud
+      //orb
+      //player
+      //playerCorpse
+      //portal
+      //prism
+      //prismArrow
+      //proximityBlock
+      //purpleArcherPortal
+      //sensorBlock
+      //shiftBlock
+      //shockCircle
+      //slime
+      //spikeball
+      //switchBlock
+      //technoMage
+      //technoMissile
+      //tornado
+      //worm
+
+    };
     public const string InputName = "TowerfallAi.Core.AgentConnectionRemote";
 
-    public static void Init() { }
+    public static void Init() {}
 
     static List<JObject> entities;
     static CancellationToken cancelAgentCommunication;
@@ -168,16 +291,31 @@ namespace TowerfallAi.Core {
 
       List<Task> tasks = new List<Task>();
 
+      List<Entity> listPlayer = level.Session.CurrentLevel[GameTags.Player];
+      listPlayerIndexPlaying.Clear();
+      for (var i = 0; i < listPlayer.Count; i++)
+      {
+        // save player at the first frame, because when player died, the player will change in session , died player disappear
+        listPlayerIndexPlaying.Add(((Player)listPlayer[i]).PlayerIndex);
+      }
+
       // Send all state inits.
       for (int i = 0; i < AgentConnections.Count; i++) {
         var connection = AgentConnections[i];
         if (connection == null) continue;
-        if (!InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString()))
+
+        if (!listPlayerIndexPlaying.Contains(i))
         {
           string notPlayingMessage = JsonConvert.SerializeObject(new StateNotPlaying { index = connection.index });
           Logger.Info("Sending StateNotPlaying to agent {0}.".Format(connection.index));
           connection.Send(notPlayingMessage, frame);
         }
+        //if (!InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString()))
+        //{
+        //  string notPlayingMessage = JsonConvert.SerializeObject(new StateNotPlaying { index = connection.index });
+        //  Logger.Info("Sending StateNotPlaying to agent {0}.".Format(connection.index));
+        //  connection.Send(notPlayingMessage, frame);
+        //}
         else
         {
           string initMessage = JsonConvert.SerializeObject(new StateInit { index = connection.index });
@@ -201,17 +339,22 @@ namespace TowerfallAi.Core {
       for (int i = 0; i < AgentConnections.Count; i++) {
         var connection = AgentConnections[i];
         if (connection == null) continue;
-        if (!InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString()))
-        {
-          string notPlayingMessage = JsonConvert.SerializeObject(new StateNotPlaying { index = connection.index });
-          Logger.Info("Sending StateNotPlaying to agent {0}.".Format(connection.index));
-          connection.Send(notPlayingMessage, frame);
-        }
-        else
-        {
+        //if (!InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString()))
+        //{
+        //  // NEw : don't resend a StateNotPlaying, already done above
+        //  //string notPlayingMessage = JsonConvert.SerializeObject(new StateNotPlaying { index = connection.index });
+        //  //Logger.Info("Sending StateNotPlaying to agent {0}.".Format(connection.index));
+        //  //connection.Send(notPlayingMessage, frame);
+        //  continue;
+        //}
+        //else
+        //{
           Logger.Info("Notify level load to agent {0}.".Format(connection.index));
           connection.Send(scenarioMessage, frame);
-        }
+        //}
+
+        // TODO test remove async task 
+        // TODO test 
         var task = TaskEx.Run(async () => {
           Message reply = await connection.ReceiveAsync(AiMod.Config.agentTimeout, cancelAgentCommunication);
           if (!reply.success) {
@@ -221,11 +364,11 @@ namespace TowerfallAi.Core {
         tasks.Add(task);
       }
 
-      Logger.Info("Wait for all agents to ack state scenario.");
+      Logger.Info("Wait for all agents playing to ack state scenario.");
       WaitAllAndClear(tasks);
 
       scenarioSent = true;
-      Logger.Info("All agents received scenario.");
+      Logger.Info("All agents playing received scenario.");
     }
 
     private static void WaitAllAndClear(List<Task> tasks) {
@@ -296,6 +439,22 @@ namespace TowerfallAi.Core {
       }
     }
 
+
+    //public static bool isPlaying(int playerIndex, List<Entity> listPlayer) {
+    //  for (var i = 0; i < listPlayer.Count; i++)
+    //  {
+    //    try
+    //    {
+    //      Logger.Info("listPlayer[i].GetType().ToString() = ");
+    //      Logger.Info(listPlayer[i].GetType().ToString());
+    //      if (((Player)listPlayer[i]).PlayerIndex == playerIndex) return true;
+    //    } catch (Exception e) {
+    //      Logger.Info(e.Message);
+    //    }
+    //  }
+    //  return false;
+    //}
+
     public static void RefreshInputFromAgents(Level level) {
 
       // Game has to be reset at least once in Sandbox mode.
@@ -331,27 +490,51 @@ namespace TowerfallAi.Core {
       List<Task> tasks = new List<Task>();
 
       // Start receiving all messages
-      for (int i = 0; i< AgentConnections.Count; i++) {
+      //send only to player playing in the level
+      //if (frame == 0)
+      //{
+      //  List<Entity> listPlayer = level.Session.CurrentLevel[GameTags.Player];
+      //  listPlayerIndexPlaying.Clear();
+      //  for (var i = 0; i < listPlayer.Count; i++)
+      //  {
+      //    // save player at the first frame, because when player died, the player will change in session , died player disappear
+      //    listPlayerIndexPlaying.Add(((Player)listPlayer[i]).PlayerIndex);
+      //  }
+      //}
 
+      for (int i = 0; i < AgentConnections.Count; i++)
+      {
         AgentConnection connection = AgentConnections[i];
         if (connection == null) continue;
 
-        if (!InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString()))
-        {
-          string notPlayingMessage = JsonConvert.SerializeObject(new StateNotPlaying { index = connection.index, id = stateUpdate.id });
-          connection.Send(notPlayingMessage, frame);
+        //send state not playing only once for python AI at the first frame
+        if (!listPlayerIndexPlaying.Contains(i)) { 
+          //if (frame == 0) {
+            string notPlayingMessage = JsonConvert.SerializeObject(new StateNotPlaying { index = connection.index, id = stateUpdate.id });
+            connection.Send(notPlayingMessage, frame);
+          //} else {
+          //  continue;
+          //}
         }
+        //if (!InputName.Equals(TFGame.PlayerInputs[i].GetType().ToString()))
+        //{
+        //  string notPlayingMessage = JsonConvert.SerializeObject(new StateNotPlaying { index = connection.index, id = stateUpdate.id });
+        //  connection.Send(notPlayingMessage, frame);
+        //}
         else
         {
           connection.Send(serializedStateUpdate, frame);
         }
-        var task = TaskEx.Run(async () => {
+        var task = TaskEx.Run(async () =>
+        {
           Data.Message message = await connection.ReceiveAsync(AiMod.Config.agentTimeout, cancelAgentCommunication);
-          if (message.id != stateUpdate.id) {
+          if (message.id != stateUpdate.id)
+          {
             throw new Exception($"Ids don't match. Expected: {stateUpdate.id}, Actual: {message.id}");
           }
 
-          if (message.draws != null) {
+          if (message.draws != null)
+          {
             draws.AddRange(message.draws);
           }
 
@@ -465,6 +648,17 @@ namespace TowerfallAi.Core {
 
       foreach (var ent in level.Layers[0].Entities) {
         Type type = ent.GetType();
+        // TODO inspect, no freeze when oly player, some entity can do freeze
+
+
+        if (listEntityToIgnore.Contains(type.ToString())) continue;
+
+        if (!listEntityToAdd.Contains(type.ToString())) {
+          //get entity to ignore on log
+          //Logger.Info(type.ToString());
+        }
+
+        //if (!"TowerFall.Player".Equals(type.ToString())) continue;
         Func<Entity, StateEntity> getState;
         if (!getStateFunctions.TryGetValue(type, out getState)) continue;
 

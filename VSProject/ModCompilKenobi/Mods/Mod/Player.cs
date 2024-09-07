@@ -419,6 +419,28 @@ namespace TowerfallAi.Mod
       }
       return GhostUpdate();
     }
+
+    public override PlayerCorpse Die(DeathCause deathCause, int killerIndex, bool brambled = false, bool laser = false)
+    {
+      //remove playtag mode, if player die from an arrow just after taking the treasure playtag, the game will never end because the tag is dead
+      if (playTag)
+      {
+        List<Entity> listPlayer = this.Level.Session.CurrentLevel[GameTags.Player];
+        for (var i = 0; i < listPlayer.Count; i++)
+        {
+          ((Player)listPlayer[i]).playTagCountDownOn = false;
+        }
+        Player.ShootLock = false;
+        playTag = false;
+        //foreach (Player p in this.Level.Session.CurrentLevel[GameTags.Player])
+        //{
+        //  p.playTagCountDownOn = false;
+        //}
+        //Player.ShootLock = false;
+        //playTag = false;
+      }
+      return base.Die(deathCause, killerIndex, brambled, laser);
+    }
   }
 
   [Patch("TowerFall.Player")]

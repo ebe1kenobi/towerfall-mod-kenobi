@@ -21,13 +21,14 @@ class Agent:
     self.moves = []
     self.my_state = []
     self.players = []
+    self.not_playing = False
     # self.attack_achers = attack_archers
 
   def run(self):
     while True:
       game_state = self.connection.read_json()
       # logging.info('towerfall.run : agent.act')
-      self.act(game_state)    
+      self.act(game_state)
 
   def act(self, game_state: Mapping[str, Any]):
     '''
@@ -40,7 +41,8 @@ class Agent:
       # 'notplaying' is sent every time a match series starts for an agents not selected to play
       # Acknowledge the init message.
       self.connection.send_json(dict(type='result', success=True, id = game_state['id']))
-      return True    
+      self.not_playing = True
+      return True
 
     # There are three main types to handle, 'init', 'scenario' and 'update'.
     # Check 'type' to handle each accordingly.
@@ -50,6 +52,7 @@ class Agent:
       # 'init' is sent every time a match series starts. It contains information about the players and teams.
       # The seed is based on the bot index so each bots acts differently.
       self.state_init = game_state
+      self.not_playing = False
       random.seed(self.state_init['index'])
       # Acknowledge the init message.
       # logging.info('send_json : ' + str(dict(type='result', success=True)))
@@ -57,7 +60,7 @@ class Agent:
       return True
 
     # Add game mode # AiMod.Config.mode == GameModes.Quest
-    if game_state['type'] == 'scenario': 
+    if game_state['type'] == 'scenario':
       # logging.info('game_state.type = ' + str(game_state['type']))
       # 'scenario' informs your bot about the current state of the ground. Store this information
       # to use in all subsequent loops. (This example bot doesn't use the shape of the scenario)
@@ -89,9 +92,9 @@ class Agent:
       # You are required to reply with actions, or the agent will get disconnected.
       # logging.info('send_actions')
       self.send_actions()
-      return True  
+      return True
 
-    return False    
+    return False
 
   def press(self, b):
     # logging.info('agent.press')
@@ -110,7 +113,7 @@ class Agent:
   def add_move(self, *moves):
     # logging.info('agent.add_move')
     self.moves.extend(moves)
-  
+
   def has_move(self):
     # logging.info('agent.has_move')
     return True if len(self.moves) > 0 else False
@@ -119,7 +122,7 @@ class Agent:
     # logging.info('agent.shift_move')
     move = self.moves[0]
     self.moves.pop(0)
-    return move    
+    return move
 
   def has_arrow(self, my_state):
     # logging.info('agent.has_arrow')
@@ -133,4 +136,4 @@ class Agent:
     return self.my_state['playTagOn']
 
   def is_tag(self):
-    return self.my_state['playTag']      
+    return self.my_state['playTag']
