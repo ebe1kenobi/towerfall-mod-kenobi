@@ -50,8 +50,9 @@ namespace TowerfallAi.Mod {
       nbUpdate++;
       if (! (Ending)) {
         if (this.Session.CurrentLevel.LivingPlayers > 0 && ((Player)this.Session.CurrentLevel.Players[0]).playTagCountDownOn) //todo maybe crash here...
-        TowerfallModPlayTag.TowerfallModPlayTag.Update();
+          TowerfallModPlayTag.TowerfallModPlayTag.Update();
 
+        //TODO control difficulty
         if (AiMod.ModAIEnabled) {
           Agents.RefreshInputFromAgents(this);
 

@@ -6,6 +6,7 @@ using TowerFall;
 using TowerfallAi.Core;
 using NAIMod;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace ModCompilKenobi
 {
@@ -15,7 +16,9 @@ namespace ModCompilKenobi
     public Text playerName;
     public Image upArrow; 
     public Image downArrow;
-
+    public Image upRightArrow;
+    public Image upLeftArrow;
+    static public Dictionary<String, int> difficultyLevel = new Dictionary<string, int>();
     public MyRollcallElement(int playerIndex) : base(playerIndex)
     {
       if (AiMod.ModAIEnabled || NAIMod.NAIMod.NAIModEnabled)
@@ -33,7 +36,7 @@ namespace ModCompilKenobi
       Vector2 positionText = new Vector2();
       if (TF8PlayerMod.TF8PlayerMod.Mod8PEnabled)
       {
-        positionText = new Vector2(-10, -60);
+        positionText = new Vector2(-10, -70);
       }
       else
       {
@@ -46,22 +49,40 @@ namespace ModCompilKenobi
       upArrow.Color = color;
       this.Add((Component)upArrow);
       upArrow.X = -10;
-      upArrow.Y = -70;
+      upArrow.Y = -90;
 
       downArrow = new Image(TFGame.Atlas["versus/playerIndicator"]);
       downArrow.Visible = true;
       this.Add((Component)downArrow);
       downArrow.X = -10;
-      downArrow.Y = -50;
+      downArrow.Y = -45;
       downArrow.Color = color;
 
+      upRightArrow = new Image(TFGame.MenuAtlas["portraits/arrow"]);
+      upRightArrow.Visible = true;
+      upRightArrow.Color = color;
+      this.Add((Component)upRightArrow);
+      upRightArrow.X = 5;
+      upRightArrow.Y = -70;
+
+      upLeftArrow = new Image(TFGame.MenuAtlas["portraits/arrow"]);
+      upLeftArrow.Visible = true;
+      upLeftArrow.FlipX = true;
+      upLeftArrow.Color = color;
+      this.Add((Component)upLeftArrow);
+      upLeftArrow.X = -20;
+      upLeftArrow.Y = -70;
+
       String name = "";
-      playerName = new Text(TFGame.Font, name, positionText, color, Text.HorizontalAlign.Left, Text.VerticalAlign.Bottom);
+      difficultyLevel["AI"] = 0;
+      difficultyLevel["NAI"] = 0;
+      playerName = new Text(TFGame.Font, name, positionText, color, Text.HorizontalAlign.Left, Text.VerticalAlign.Center);
       this.Add((Component)playerName);
     }
 
     public void SetPlayerName() {
-      ((Text)playerName).text = ModCompilKenobi.GetPlayerTypePlaying(this.playerIndex) + (this.playerIndex + 1);
+      String type = ModCompilKenobi.GetPlayerTypePlaying(this.playerIndex);
+      ((Text)playerName).text = type + (this.playerIndex + 1) + (type != "P" ? "\n\nLVL " + difficultyLevel[type] : "");
     }
 
     public static Vector2 GetPosition(int playerIndex)
@@ -118,10 +139,26 @@ namespace ModCompilKenobi
           if (ModCompilKenobi.CurrentPlayerIs(PlayerType.Human, playerIndex)) {
             this.upArrow.Visible = false;
             this.downArrow.Visible = true;
+            this.upLeftArrow.Visible = false;
+            this.upRightArrow.Visible = false;
           } 
           else if (ModCompilKenobi.CurrentPlayerIs(PlayerType.AiMod, playerIndex))
           {
             this.upArrow.Visible = true;
+            if (playerIndex == 0) {
+              String type = ModCompilKenobi.GetPlayerTypePlaying(this.playerIndex);
+
+              if (difficultyLevel[type] > 0) { 
+                  this.upLeftArrow.Visible = true;
+              } else {
+                this.upLeftArrow.Visible = false;
+              }
+              if (difficultyLevel[type] < 10) { 
+                  this.upRightArrow.Visible = true;
+              } else {
+                this.upRightArrow.Visible = false;
+              }
+            }
             if (NAIMod.NAIMod.NAIModEnabled)
               this.downArrow.Visible = true;  
             else
@@ -131,22 +168,35 @@ namespace ModCompilKenobi
           {
             this.upArrow.Visible = true;
             this.downArrow.Visible = false;
+            if (playerIndex == 0)
+            {
+              this.upLeftArrow.Visible = true;
+              this.upRightArrow.Visible = true;
+            }
           }
         } else if (ModCompilKenobi.CurrentPlayerIs(PlayerType.AiMod, playerIndex)) {
           this.upArrow.Visible = false;
           this.downArrow.Visible = true;
+          this.upLeftArrow.Visible = false;
+          this.upRightArrow.Visible = false;
         } else if (ModCompilKenobi.CurrentPlayerIs(PlayerType.NAIMod, playerIndex)) {
           this.upArrow.Visible = true;
           this.downArrow.Visible = false;
+          this.upLeftArrow.Visible = false;
+          this.upRightArrow.Visible = false;
         }
 
-        this.upArrow.Y = (float)(-68 + (double)this.arrowSine.Value * 3.0 + 6.0 * (this.rightArrowWiggle ? (double)this.arrowWiggle.Value : 0.0));
+        this.upArrow.Y = (float)(-78 + (double)this.arrowSine.Value * 3.0 + 6.0 * (this.rightArrowWiggle ? (double)this.arrowWiggle.Value : 0.0));
         this.downArrow.Y = (float)(-50.0 - (double)this.arrowSine.Value * 3.0 + 6.0 * (!this.rightArrowWiggle ? (double)this.arrowWiggle.Value : 0.0));
+        this.upRightArrow.X = (float)(7.0 - (double)this.arrowSine.Value * 3.0 + 6.0 * (!this.rightArrowWiggle ? (double)this.arrowWiggle.Value : 0.0));
+        this.upLeftArrow.X = (float)(-24.0 + (double)this.arrowSine.Value * 3.0 + 6.0 * (!this.rightArrowWiggle ? (double)this.arrowWiggle.Value : 0.0));
       }
       else
       {
         this.upArrow.Visible = false;
         this.downArrow.Visible = false;
+        this.upLeftArrow.Visible = false;
+        this.upRightArrow.Visible = false;
       }
 
       base.Render();
@@ -155,6 +205,18 @@ namespace ModCompilKenobi
     {
       if (this.input == null)
         return 0;
+
+      if ((int)ModCompilKenobi.currentPlayerType[playerIndex] > (int)PlayerType.Human) {
+        String type = ModCompilKenobi.GetPlayerTypePlaying(this.playerIndex);
+
+        if (this.input.MenuAlt && difficultyLevel[type] < 10) {
+          difficultyLevel[type]++;
+        }
+        if (this.input.MenuAlt2 && difficultyLevel[type] > 0)
+        {
+          difficultyLevel[type]--;
+        }
+      }
 
       if (ModCompilKenobi.IsThereOtherPlayerType(playerIndex)) { //at leat 2 player type
         // Move up 

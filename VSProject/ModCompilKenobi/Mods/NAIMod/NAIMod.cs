@@ -19,12 +19,12 @@ namespace NAIMod
     public static PlayerInput[] AgentInputs = new PlayerInput[TFGame.Players.Length];
 
     public static bool NAIModEnabled { get; private set;}
-    public static bool NAIModNoKeyboardEnabled { get; private set;}
+    //public static bool NAIModNoKeyboardEnabled { get; private set;}
     
     public static void ParseArgs(string[] args)
     {
-      NAIModEnabled = true; 
-      NAIModNoKeyboardEnabled = true;
+      NAIModEnabled = true;
+      //NAIModNoKeyboardEnabled = true;
       for (int i = 0; i < args.Length; i++)
       {
         //Always enabled in compil
@@ -32,10 +32,10 @@ namespace NAIMod
         //{
         //  NAIModEnabled = false;
         //}
-        if (args[i] == "--nonativeaimodkeyboard")
-        {
-          NAIModNoKeyboardEnabled = false;
-        }
+        //if (args[i] == "--nonativeaimodkeyboard")
+        //{
+        //  NAIModNoKeyboardEnabled = false;
+        //}
       }
     }
 

@@ -19,7 +19,7 @@ namespace TowerfallAi.Mod
     public override void Render()
     {
       if (AiMod.ModAIEnabled) {
-        Message = "WAITING AI TO CONNECT";
+        Message = "WAITING PYTHON AI TO CONNECT";
         for (var i = 0; i < (int)(DateTime.Now - creationTime).TotalSeconds; i++)
         {
           if (i % 2 == 0) continue;

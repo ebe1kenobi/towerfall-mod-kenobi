@@ -45,7 +45,7 @@ namespace TowerfallAi.Mod {
       {
         // Makes the bot automatically confirm all menus.
         if (AiMod.ModAITraining && !AiMod.IsHumanPlaying()) return true;
-        if (!AiMod.IsHumanPlaying()) return true;
+        //if (!AiMod.IsHumanPlaying()) return true;
         var ptr = typeof(MenuInput).GetMethod("$original_get_ReplaySkip").MethodHandle.GetFunctionPointer();
         var orginalGetReplaySkip = (Func<bool>)Activator.CreateInstance(typeof(Func<bool>), null, ptr);
         return orginalGetReplaySkip();

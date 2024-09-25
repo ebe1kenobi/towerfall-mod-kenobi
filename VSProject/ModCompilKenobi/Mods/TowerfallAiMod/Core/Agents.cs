@@ -25,46 +25,224 @@ namespace TowerfallAi.Core {
     static int frame;
     static bool levelLoaded;
     static bool scenarioSent;
+    static DateTime lasttime;
 
+    //TowerFall.ShockCircle
     static List<String> listEntityToAdd = new List<string>
     {
-      "TowerFall.Player",
-      //"TowerFall.TreasureChest",
+      //"TowerFall.Player",
+
+      //"TowerFall.Lantern",
+      //"TowerFall.Chain",
+      //"TowerFall.Cobwebs",
       //"TowerFall.LevelTiles",
-      //"TowerFall.ShieldPickup",
+      //"TowerFall.DefaultArrow",
+      //"TowerFall.DefaultHat",
+      //"TowerFall.LightFade",
+      //"TowerFall.PlayerCorpse",
+      //"TowerFall.DeathSkull",
+      //"TowerFall.CatchShine",
+      //"TowerFall.TreasureChest",
+      //"TowerFall.BGSkeleton",
+      //"TowerFall.JumpPad",
+      //"TowerFall.CrackedPlatform",
+      //"TowerFall.Spikeball",
+      //"TowerFall.OrbPickup",
+      //"TowerFall.Orb",
+      //"TowerFall.Crown",
+      //"TowerFall.BGBigMushroom",
+      //"TowerFall.CrackedWall",
       //"TowerFall.ArrowTypePickup",
-      //TowerFall.SensorBlock
-      //TowerFall.BrambleArrow
-      //TowerFall.Brambles
-      //TowerFall.WingsPickup
-      //TowerfallAi.Mod.PlayTag
+      //"TowerFall.FloatText",
+      //"TowerFall.ShieldPickup",
+      //"TowerFall.BombArrow",
+      //"TowerFall.BombParticle",
+      //"TowerFall.Explosion",
+      //"TowerFall.BombPickup",
+      //"TowerFall.LaserArrow",
+      //"TowerFall.MovingPlatform",
+      //"TowerFall.LavaControl",
+      //"TowerFall.Lava",
+      //"TowerFall.WingsPickup",
+      //"TowerFall.Icicle",
+      //"TowerFall.SnowClump",
+      //"TowerFall.Ice",
+      //"TowerFall.PlayerBreath",
+      //"TowerFall.DrillArrow",
+      //"TowerFall.SpeedBootsPickup",
+      //"TowerFall.Miasma",
+      //"TowerFall.KingIntro",
+      //"TowerFall.SwitchBlockControl",
+      //"TowerFall.SwitchBlock",
+      //"TowerFall.LevelEntity",
+      //"TowerFall.ShiftBlock",
+      //"TowerFall.MirrorPickup",
+      //"TowerFall.BoltArrow",
+      //"TowerFall.SmallShock",
+      //"TowerFall.WaterDrop",
+      //"TowerFall.ProximityBlock",
+      //"TowerFall.MoonGlassBlock",
+      //"TowerFall.HotCoals",
+      //"TowerFall.RainDrops",
+      //"TowerFall.LoopPlatform",
+      //"TowerFall.PirateBanner",
+      //"TowerFall.GhostShipWindow",
+      //"TowerFall.RotatePlatform",
+      //"TowerFall.Mud",
+      //"TowerFall.SensorBlock",
+      //"TowerFall.BrambleArrow",
+      //"TowerFall.Brambles",
+      //"TowerFall.CrumbleBlock",
+      //"TowerFall.TriggerArrow",
+      //"TowerFall.PrismArrow",
+      //"TowerFall.CrumbleWall",
+      //"Monocle.ParticleSystem",
+      //"TowerfallAi.Mod.PlayTag",
     };
 
     static List<String> listEntityToIgnore = new List<string> {
-      //"TowerFall.DefaultArrow",
-      //"TowerFall.DefaultHat",
-      //"TowerFall.Crown",
-      //"TowerFall.PlayerCorpse",
-      //"TowerFall.LightFade",
-      //"TowerFall.LevelEntity",
-      //"TowerFall.TreasureChest",
-      //"TowerFall.DeathSkull",
-      //"Monocle.ParticleSystem",
-      //"TowerFall.LevelTiles",
-      //"TowerFall.RainDrops",
-      //"TowerFall.ShieldPickup",
-      //"TowerFall.ArrowTypePickup",
-      //"TowerFall.CatchShine",
-      //"TowerFall.WaterDrop",
+      
+        //still freeze with :
+      "TowerFall.Lantern",
+      "TowerFall.Chain",
+      "TowerFall.Cobwebs",
+      "TowerFall.LevelTiles",
+      "TowerFall.DefaultArrow",
+      "TowerFall.DefaultHat",
+      "TowerFall.LightFade",
+      "TowerFall.PlayerCorpse",
+      "TowerFall.DeathSkull",
+      "TowerFall.CatchShine",
+      "TowerFall.TreasureChest",
+      "TowerFall.BGSkeleton",
+      "TowerFall.JumpPad",
+      "TowerFall.CrackedPlatform",
+      "TowerFall.Spikeball",
+      "TowerFall.OrbPickup",
+      "TowerFall.Orb",
+      "TowerFall.Crown",
+      "TowerFall.BGBigMushroom",
+      "TowerFall.CrackedWall",
+      "TowerFall.ArrowTypePickup",
+      "TowerFall.FloatText",
+      "TowerFall.ShieldPickup",
+      "TowerFall.BombArrow",
+      "TowerFall.BombParticle",
+      "TowerFall.Explosion",
+      "TowerFall.BombPickup",
+      "TowerFall.LaserArrow",
+      "TowerFall.MovingPlatform",
+      "TowerFall.LavaControl",
+      "TowerFall.Lava",
+      "TowerFall.WingsPickup",
+      "TowerFall.Icicle",
+      "TowerFall.SnowClump",
+      "TowerFall.Ice",
+      "TowerFall.PlayerBreath",
+      "TowerFall.DrillArrow",
+      "TowerFall.SpeedBootsPickup",
+      "TowerFall.Miasma",
+      "TowerFall.KingIntro",
+      "TowerFall.SwitchBlockControl",
+      "TowerFall.SwitchBlock",
+      "TowerFall.LevelEntity",
+      "TowerFall.ShiftBlock",
+      "TowerFall.MirrorPickup",
+      "TowerFall.BoltArrow",
+      "TowerFall.SmallShock",
+      "TowerFall.WaterDrop",
+      "TowerFall.ProximityBlock",
+      "TowerFall.MoonGlassBlock",
+      "TowerFall.HotCoals",
+      "TowerFall.RainDrops",
+      "TowerFall.LoopPlatform",
+      "TowerFall.PirateBanner",
+      "TowerFall.GhostShipWindow",
+      "TowerFall.RotatePlatform",
+      "TowerFall.Mud",
+      "TowerFall.SensorBlock",
+      "TowerFall.BrambleArrow",
+      "TowerFall.Brambles",
+      "TowerFall.CrumbleBlock",
+      "TowerFall.TriggerArrow",
+      "TowerFall.PrismArrow",
+      "TowerFall.CrumbleWall",
+      "Monocle.ParticleSystem",
+      "TowerfallAi.Mod.PlayTag",
+      "TowerFall.FeatherArrow",
+"TowerFall.Prism",
+"TowerFall.PrismParticle",
+"TowerFall.CrumbleWallChunk",
+"TowerFall.PrismVanish",
+"TowerFall.ShockCircle",
 
-      //to inspect
-      //TowerFall.Mud
-      //TowerFall.SensorBlock
-      //TowerFall.BrambleArrow
-      //TowerFall.FloatText
-      //TowerFall.Brambles
-      //TowerFall.WingsPickup
-      //TowerfallAi.Mod.PlayTag
+      ////still freeze with :
+      //"TowerFall.Lantern",
+      //"TowerFall.Chain",
+      //"TowerFall.Cobwebs",
+      //"TowerFall.LevelTiles",
+      ////"TowerFall.DefaultArrow",
+      //"TowerFall.DefaultHat",
+      //"TowerFall.LightFade",
+      //"TowerFall.PlayerCorpse",
+      //"TowerFall.DeathSkull",
+      //"TowerFall.CatchShine",
+      ////"TowerFall.TreasureChest",
+      //"TowerFall.BGSkeleton",
+      ////"TowerFall.JumpPad",
+      ////"TowerFall.CrackedPlatform",
+      ////"TowerFall.Spikeball",
+      ////"TowerFall.OrbPickup",
+      ////"TowerFall.Orb",
+      //"TowerFall.Crown",
+      //"TowerFall.BGBigMushroom",
+      ////"TowerFall.CrackedWall",
+      ////"TowerFall.ArrowTypePickup",
+      //"TowerFall.FloatText",
+      ////"TowerFall.ShieldPickup",
+      ////"TowerFall.BombArrow",
+      //"TowerFall.BombParticle",
+      //"TowerFall.Explosion",
+      ////"TowerFall.BombPickup",
+      ////"TowerFall.LaserArrow",
+      ////"TowerFall.MovingPlatform",
+      //"TowerFall.LavaControl",
+      //"TowerFall.Lava",
+      ////"TowerFall.WingsPickup",
+      ////"TowerFall.Icicle",
+      ////"TowerFall.SnowClump",
+      //"TowerFall.Ice",
+      //"TowerFall.PlayerBreath",
+      ////"TowerFall.DrillArrow",
+      ////"TowerFall.SpeedBootsPickup",
+      //"TowerFall.Miasma",
+      //"TowerFall.KingIntro",
+      //"TowerFall.SwitchBlockControl",
+      ////"TowerFall.SwitchBlock",
+      //"TowerFall.LevelEntity",
+      ////"TowerFall.ShiftBlock",
+      ////"TowerFall.MirrorPickup",
+      ////"TowerFall.BoltArrow",
+      //"TowerFall.SmallShock",
+      //"TowerFall.WaterDrop",
+      ////"TowerFall.ProximityBlock",
+      ////"TowerFall.MoonGlassBlock",
+      //"TowerFall.HotCoals",
+      //"TowerFall.RainDrops",
+      ////"TowerFall.LoopPlatform",
+      //"TowerFall.PirateBanner",
+      //"TowerFall.GhostShipWindow",
+      ////"TowerFall.RotatePlatform",
+      //"TowerFall.Mud",
+      ////"TowerFall.SensorBlock",
+      ////"TowerFall.BrambleArrow",
+      ////"TowerFall.Brambles",
+      ////"TowerFall.CrumbleBlock",
+      ////"TowerFall.TriggerArrow",
+      ////"TowerFall.PrismArrow",
+      ////"TowerFall.CrumbleWall",
+      //"Monocle.ParticleSystem",
+      ////"TowerfallAi.Mod.PlayTag",
 
       //from doc
       //amaranthBoss
@@ -650,13 +828,31 @@ namespace TowerfallAi.Core {
         Type type = ent.GetType();
         // TODO inspect, no freeze when oly player, some entity can do freeze
 
+        DateTime now = DateTime.Now;
+        TimeSpan span = now - lasttime;
+        bool throwE = false;
+        //Logger.Info("1.now - lasttime = " + span.TotalMilliseconds);
+        if (span > new TimeSpan(0,0,0,0,200)) { 
+          Logger.Info("2.now - lasttime = " + span.TotalMilliseconds);
+          throwE = true;
+        }
+        lasttime = DateTime.Now;
 
-        if (listEntityToIgnore.Contains(type.ToString())) continue;
-
-        if (!listEntityToAdd.Contains(type.ToString())) {
+        if (type.ToString() != "TowerFall.Player" && !listEntityToIgnore.Contains(type.ToString()))
+        {
           //get entity to ignore on log
           //Logger.Info(type.ToString());
+          listEntityToIgnore.Add(type.ToString());
+          Logger.Info("==" + type.ToString());
         }
+        if (listEntityToIgnore.Contains(type.ToString())) continue;
+        //if (throwE) throw new Exception("too much time");
+        //if (!listEntityToAdd.Contains(type.ToString())) {
+        //  //get entity to ignore on log
+        //  //Logger.Info(type.ToString());
+        //  listEntityToAdd.Add(type.ToString());
+        //  //Logger.Info(type.ToString());
+        //}
 
         //if (!"TowerFall.Player".Equals(type.ToString())) continue;
         Func<Entity, StateEntity> getState;
