@@ -33,12 +33,12 @@ namespace NAIMod
     {
       nbFrame++;
       //play only each N frame
-      if (nbFrame % (index + 1) != 0) //TODO control difficulty
-      //if (nbFrame % (index + 1 * 3) != 0)
-      {
-        // No need to calculate at each Update
-        return;
-      }
+      //if (nbFrame % (index + 1) != 0) //TODO control difficulty
+      ////if (nbFrame % (index + 1 * 3) != 0)
+      //{
+      //  // No need to calculate at each Update
+      //  return;
+      //}
       if (level.Paused) return;
       if (level.Frozen) return;
       if (level.Ending) return;

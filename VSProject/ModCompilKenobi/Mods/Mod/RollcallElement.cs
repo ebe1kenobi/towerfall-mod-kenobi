@@ -74,8 +74,8 @@ namespace ModCompilKenobi
       upLeftArrow.Y = -70;
 
       String name = "";
-      difficultyLevel["AI"] = 0;
-      difficultyLevel["NAI"] = 0;
+      difficultyLevel["AI"] = 20;
+      difficultyLevel["NAI"] = 20;
       playerName = new Text(TFGame.Font, name, positionText, color, Text.HorizontalAlign.Left, Text.VerticalAlign.Center);
       this.Add((Component)playerName);
     }
@@ -148,16 +148,16 @@ namespace ModCompilKenobi
             if (playerIndex == 0) {
               String type = ModCompilKenobi.GetPlayerTypePlaying(this.playerIndex);
 
-              if (difficultyLevel[type] > 0) { 
+              //if (difficultyLevel[type] > 0) { 
                   this.upLeftArrow.Visible = true;
-              } else {
-                this.upLeftArrow.Visible = false;
-              }
-              if (difficultyLevel[type] < 10) { 
+              //} else {
+              //  this.upLeftArrow.Visible = false;
+              //}
+              //if (difficultyLevel[type] < 100) { 
                   this.upRightArrow.Visible = true;
-              } else {
-                this.upRightArrow.Visible = false;
-              }
+              //} else {
+              //  this.upRightArrow.Visible = false;
+              //}
             }
             if (NAIMod.NAIMod.NAIModEnabled)
               this.downArrow.Visible = true;  
@@ -209,13 +209,12 @@ namespace ModCompilKenobi
       if ((int)ModCompilKenobi.currentPlayerType[playerIndex] > (int)PlayerType.Human) {
         String type = ModCompilKenobi.GetPlayerTypePlaying(this.playerIndex);
 
-        if (this.input.MenuAlt && difficultyLevel[type] < 10) {
-          difficultyLevel[type]++;
-        }
-        if (this.input.MenuAlt2 && difficultyLevel[type] > 0)
-        {
-          difficultyLevel[type]--;
-        }
+        if (this.input.MenuAlt)
+          difficultyLevel[type] += 5;
+          if (difficultyLevel[type] > 100) difficultyLevel[type] = 0;
+        if (this.input.MenuAlt2)
+          difficultyLevel[type] -= 5;
+          if (difficultyLevel[type] < 1) difficultyLevel[type] = 100;
       }
 
       if (ModCompilKenobi.IsThereOtherPlayerType(playerIndex)) { //at leat 2 player type

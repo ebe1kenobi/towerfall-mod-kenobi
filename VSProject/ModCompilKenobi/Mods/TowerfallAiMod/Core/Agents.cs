@@ -25,7 +25,7 @@ namespace TowerfallAi.Core {
     static int frame;
     static bool levelLoaded;
     static bool scenarioSent;
-    static DateTime lasttime;
+    //static DateTime lasttime;
 
     //TowerFall.ShockCircle
     static List<String> listEntityToAdd = new List<string>
@@ -828,24 +828,26 @@ namespace TowerfallAi.Core {
         Type type = ent.GetType();
         // TODO inspect, no freeze when oly player, some entity can do freeze
 
-        DateTime now = DateTime.Now;
-        TimeSpan span = now - lasttime;
-        bool throwE = false;
-        //Logger.Info("1.now - lasttime = " + span.TotalMilliseconds);
-        if (span > new TimeSpan(0,0,0,0,200)) { 
-          Logger.Info("2.now - lasttime = " + span.TotalMilliseconds);
-          throwE = true;
-        }
-        lasttime = DateTime.Now;
+        //DateTime now = DateTime.Now;
+        //TimeSpan span = now - lasttime;
+        //bool throwE = false;
+        ////Logger.Info("1.now - lasttime = " + span.TotalMilliseconds);
+        //if (span > new TimeSpan(0,0,0,0,200)) { 
+        //  Logger.Info("2.now - lasttime = " + span.TotalMilliseconds);
+        //  throwE = true;
+        //}
+        //lasttime = DateTime.Now;
 
         if (type.ToString() != "TowerFall.Player" && !listEntityToIgnore.Contains(type.ToString()))
         {
           //get entity to ignore on log
           //Logger.Info(type.ToString());
           listEntityToIgnore.Add(type.ToString());
+          // cd "/c/Program Files (x86)/Steam/steamapps/common/TowerFall/modcompilkenobi/logs"; grep "1 ==" *
+          // grep "1 ==" *
           Logger.Info("==" + type.ToString());
         }
-        if (listEntityToIgnore.Contains(type.ToString())) continue;
+        if (listEntityToIgnore.Contains(type.ToString())) continue; //ignore all except player, TODO modify
         //if (throwE) throw new Exception("too much time");
         //if (!listEntityToAdd.Contains(type.ToString())) {
         //  //get entity to ignore on log

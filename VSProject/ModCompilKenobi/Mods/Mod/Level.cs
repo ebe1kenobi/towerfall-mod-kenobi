@@ -53,12 +53,12 @@ namespace TowerfallAi.Mod {
           TowerfallModPlayTag.TowerfallModPlayTag.Update();
 
         //TODO control difficulty
-        if (AiMod.ModAIEnabled) {
+        if (AiMod.ModAIEnabled && nbUpdate % MyRollcallElement.difficultyLevel["AI"] == 0) {
           Agents.RefreshInputFromAgents(this);
 
         }
 
-        if (NAIMod.NAIMod.NAIModEnabled)
+        if (NAIMod.NAIMod.NAIModEnabled && nbUpdate % MyRollcallElement.difficultyLevel["NAI"] == 0)
         {
           NAIMod.NAIMod.AgentUpdate(this);
         }
