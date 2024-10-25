@@ -20,8 +20,13 @@ namespace TowerfallModPlayTag
       Sounds.boss_humanLaugh.Play(player.X);
       player.Level.LightingLayer.SetSpotlight((LevelEntity)player);
       //player.Level.Session.CurrentLevel.LightingLayer.SetSpotlight((LevelEntity)player);
+      for (int i = 0; i < TFGame.Players.Length; i++) {
+        if (TFGame.Players[i]) {
+          TFGame.PlayerInputs[i].Rumble(1f, 20);
+        }
+      }
       Engine.TimeRate = 0.1f;
-      pause.Set(10);
+      pause.Set(30);
     }
     public static void StopPlayTagEffect()
     {

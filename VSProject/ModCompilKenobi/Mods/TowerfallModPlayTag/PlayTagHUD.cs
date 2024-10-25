@@ -52,7 +52,7 @@ namespace TowerfallAi.Mod
         Explosion.SpawnSuper(player.Level, player.Position, player.PlayerIndex, true);
       }
 
-      Draw.OutlineTextCentered(TFGame.Font, player.playTagCountDown.ToString(), Calc.Floor(player.Position + new Vector2(0f, -15f)), triggerColor, new Vector2(1f, 1f));
+      Draw.OutlineTextCentered(TFGame.Font, player.playTagCountDown.ToString(), Calc.Floor(player.Position + new Vector2(0f, -15f)), triggerColor, new Vector2(2f, 2f));
     }
   }
 }
